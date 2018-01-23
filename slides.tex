@@ -1,0 +1,149 @@
+\documentclass[aspectratio=1610,14pt,t]{beamer}
+
+% Colors
+\usepackage{color}
+\definecolor{mainorange}{HTML}{EC811B}
+\definecolor{lightgrey}{HTML}{888888}
+\definecolor{almostwhite}{HTML}{FEFEFE}
+
+% Syntax highlighting
+\usepackage{minted}
+\usepackage{alltt}
+\newcommand\hi[1]{{\color{mainorange} \textbf{#1}}}
+
+% Custom unicode symbols
+\usepackage{newunicodechar}
+\newcommand\Warning{%
+ \makebox[1.4em][c]{%
+ \makebox[0pt][c]{\raisebox{.1em}{\small!}}%
+ \makebox[0pt][c]{\color{red}\Large$\bigtriangleup$}}}%
+
+\newunicodechar{⚠}{\Warning}
+
+% Theme
+\usetheme[%
+	subsectionpage=progressbar,
+	numbering=fraction,
+	progressbar=foot,
+]{metropolis}
+
+% Customization
+\usepackage{pagecolor}
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamerfont{title}{size=\fontsize{30}{30}}
+\setbeamerfont{block title}{size=\large}
+\newcommand\sep{\textcolor{lightgrey}{\rule{\linewidth}{0.05mm}}}
+
+% Positioning
+% https://tex.stackexchange.com/a/34929/13059
+\def\Put(#1,#2)#3{\leavevmode\makebox(0,0){\put(#1,#2){#3}}}
+
+% Meta
+\title{Embedded Rust}
+\date{2018-23-31}
+\author{Raphael Nestler (@rnestler)}
+\institute{Rust Zürichsee Meetup}
+
+\begin{document}
+
+\pgfdeclareimage[width=\paperwidth]{bg}{background-dark.pdf}
+\pagecolor{almostwhite}  % Prevent speakerdeck from optimizing away the bg color
+\usebackgroundtemplate{\pgfuseimage{bg}}
+\maketitle
+
+% ----------------------------------------------------------------- %
+
+\begin{frame}[c]{println!("{:?}", Self)}
+  Hi! I'm Raphael (@rnestler).
+
+  \pause I live in Rapperswil
+
+  \pause I work at Sensirion ({\small \url{https://sensirion.com}}).
+
+  \pause I'm a founding member of Coredump\\hackerspace ({\small \url{https://coredump.ch}}).
+\end{frame}
+
+% ----------------------------------------------------------------- %
+
+\begin{frame}[plain,noframenumbering]
+	\frametitle{Outline}
+	\setcounter{tocdepth}{1}
+	\tableofcontents
+\end{frame}
+
+% ----------------------------------------------------------------- %
+
+\pgfdeclareimage[width=\paperwidth]{bg}{background-light.pdf}
+\usebackgroundtemplate{\pgfuseimage{bg}}
+
+\section{Embedded Programming}
+
+\begin{frame}[c]{What is Embedded?}
+\end{frame}
+
+\begin{frame}[c]{Why do they say it's hard?}
+\end{frame}
+
+\begin{frame}[c]{Why could Rust be awesome for it?}
+\end{frame}
+
+\begin{frame}[c]{Notable projects}
+  \begin{itemize}
+    \item zinc.rs
+    \item tockos
+    \item xargo
+  \end{itemize}
+\end{frame}
+
+
+\section{Getting started}
+
+\begin{frame}[c]{xargo}
+\end{frame}
+
+\section{Case study LPC11U24}
+
+\begin{frame}[c]{water-sensor project}
+\end{frame}
+
+\section{Awesome Stuff}
+
+\begin{frame}[c]{svd2rust}
+  Compare C defines, C++ template magic, and svd2rust generated code
+  Auto-completion could be awesome!
+  No more typos or mixing up bit indices with values!
+\end{frame}
+
+\begin{frame}[c]{xargo}
+\end{frame}
+
+\section{Painful Stuff}
+
+\begin{frame}[c]{Broken SVD files}
+\end{frame}
+
+\begin{frame}[c]{Breaking changes in nightly}
+\end{frame}
+
+\section{Future}
+
+\begin{frame}[c]{Embedded Rust in 2018}
+  Blogpost from jeparic?
+\end{frame}
+
+% ----------------------------------------------------------------- %
+
+{
+\setbeamertemplate{footline}{}
+\pgfdeclareimage[width=\paperwidth]{bg}{background-inverted.pdf}
+\usebackgroundtemplate{\pgfuseimage{bg}}
+\begin{frame}[standout]
+	\begin{centering}
+	{\Huge Thank you!}\\
+	{\normalsize \url{https://coredump.ch}}\\
+	\end{centering}
+  {\small Slides: \url{https://github.com/rust-zurichsee/meetups/}}\\
+  \vspace{3cm}
+\end{frame}
+}
+\end{document}
