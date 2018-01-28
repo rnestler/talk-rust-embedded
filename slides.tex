@@ -78,13 +78,39 @@
 
 \section{Embedded Programming}
 
-\begin{frame}[c]{What is Embedded?}
+\begin{frame}[c]{What is an \emph{Embedded System}?}
+  \begin{quote}
+    A combination of computer hardware and software, and perhaps
+    additional mechanical or other parts, designed to perform a dedicated
+    function.
+  \end{quote}
+  Michael Barr. ``Embedded Systems Glossary''\footnote{\tiny\url{https://barrgroup.com/Embedded-Systems/Glossary-E\#embedded\_system}}
+\end{frame}
+
+\begin{frame}[c]{What is embedded programming?}
+  \begin{itemize}
+    \item Dedicated, not general purpose, $\mu$C system
+    \item<1-> Baremetal
+    \item<1-> Low-Level
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[c]{Why do they say it's hard?}
+  \begin{itemize}
+    \item Harsh environment (No OS which protects you)
+    \item Resource constrained (Remember dedicated?)
+    \item Non-standard, Non-OSS toolchain
+    \item Hard realtime requirements
+    \item \ldots
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[c]{Why could Rust be awesome for it?}
+  \begin{itemize}
+    \item Zero cost abstractions!
+    \item Provides safety at compiler level, not OS
+    \item Expressive type system to encode constraints
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[c]{Notable projects}
