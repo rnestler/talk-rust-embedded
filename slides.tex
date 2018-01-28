@@ -89,7 +89,7 @@
 
 \begin{frame}[c]{What is embedded programming?}
   \begin{itemize}
-    \item Dedicated, not general purpose, $\mu$C system
+    \item Dedicated, not general purpose, µC system
     \item<1-> Baremetal
     \item<1-> Low-Level
   \end{itemize}
@@ -113,23 +113,106 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{Notable projects}
+\subsection{Notable projects}
+
+\begin{frame}[c]{\url{https://zinc.rs}}
   \begin{itemize}
-    \item zinc.rs
-    \item tockos
-    \item xargo
+      \item Proof-of-concept, currently abondoned
+      \item Descripe system in a DSL (platformtree)
+      \item Use macros to convert into setup code
+      \item Promising concept!
   \end{itemize}
 \end{frame}
 
+\begin{frame}[c,fragile]{Platformtree}
+  \begin{minted}[fontsize=\small]{rust}
+platformtree!(
+  // use lpc17xx
+  lpc17xx@mcu {
+    clock {
+      // source is clocked from main (external) oscillator running at 12MHz
+      source = "main-oscillator";
+      source_frequency = 12_000_000;
+      // configure pll to output 100MHz
+      pll {
+        m = 50;
+        n = 3;
+        divisor = 4;
+      }
+    }
+  \end{minted}
+\end{frame}
 
-\section{Getting started}
+\begin{frame}[c,fragile]{Platformtree}
+  \begin{minted}[fontsize=\small]{rust}
+    timer {
+      // define configuration for timer 1
+      timer@1 {
+        counter = 25;
+        divisor = 4;
+      }
+    }
+    gpio {
+      // define pins for gpio port 1
+      1 {
+        // pins 18 and 20 are gpio out
+        led1@18 { direction = "out"; }
+        led2@20 { direction = "out"; }
+      }
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{zinc.rs app code}
+  \begin{minted}[fontsize=\small]{rust}
+fn run(args: &pt::run_args) {
+  // toggles pin values
+  args.led1.set_high();
+  args.led2.set_low();
+  // wait for 1 second
+  (args.timer as &zinc::hal::timer::Timer).wait(1);
+
+  args.led1.set_low();
+  args.led2.set_high();
+  (args.timer as &zinc::hal::timer::Timer).wait(1);
+}
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c]{\url{https://www.tockos.org/}}
+  \begin{itemize}
+      \item \ldots
+  \end{itemize}
+\end{frame}
 
 \begin{frame}[c]{xargo}
+  \begin{itemize}
+      \item \ldots
+  \end{itemize}
 \end{frame}
 
 \section{Case study LPC11U24}
 
 \begin{frame}[c]{water-sensor project}
+  \centering
+  \includegraphics[width=.9\textwidth]{img/water-sensor-pcb.png}
+\end{frame}
+
+\begin{frame}[c]{water-sensor project}
+  \begin{itemize}
+    \item ``IoT'' project from coredump.ch
+    \item µC, LoRaWAN modem, LEDs, I²C sensors
+    \item Prototype runs with mbed C++
+    \item<2-> But I had to much time at 34C3\ldots
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{tuwat!}
+  \centering
+  \includegraphics[width=.8\textwidth]{img/port-all-the-things.jpg}
+\end{frame}
+
+\begin{frame}[c]{cortex-m-quickstart}
+  \ldots
 \end{frame}
 
 \section{Awesome Stuff}
