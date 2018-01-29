@@ -178,6 +178,22 @@ fn run(args: &pt::run_args) {
   \end{minted}
 \end{frame}
 
+\begin{frame}[fragile]{Getting started with zinc.rs}
+  \begin{minted}[fontsize=\small]{bash}
+# Old nightly
+rustup override set nightly-2016-09-17
+# downgrade xargo
+cargo install xargo --version 0.2.0 --force
+# build and download
+cd examples/blink_lpc17xx
+xargo build --release --target thumbv7m-none-eabi
+arm-none-eabi-objcopy -O binary\
+  ./target/thumbv7m-none-eabi/release/blink blink.bin
+cp blink.bin /run/media/roughl/MBED
+  \end{minted}
+\end{frame}
+
+
 \begin{frame}[c]{\url{https://www.tockos.org/}}
   \begin{itemize}
       \item \ldots
