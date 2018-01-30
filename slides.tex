@@ -250,6 +250,33 @@ cp blink.bin /run/media/roughl/MBED
 \begin{frame}[c]{Breaking changes in nightly}
 \end{frame}
 
+\begin{frame}[c,fragile]{Compiler crashes}
+  You may have seen ICE with panics\ldots
+
+  \begin{minted}[fontsize=\footnotesize,breaklines]{bash}
+Compiling water-sensor-firmware v0.1.9 (file:///home/rnestler/proggen/projects/coredump/water-sensor/water-sensor-firmware-rs)
+error: internal compiler error: /checkout/src/librustc_metadata/cstore_impl.rs:131: get_optimized_mir: missing MIR for `DefId(7/0:8 ~ cortex_m_rt[efa4]::lang_items[0]::start[0])`
+
+note: the compiler unexpectedly panicked. this is a bug.
+
+note: we would appreciate a bug report: https://github.com/rust-lang/rust/blob/master/CONTRIBUTING.md#bug-reports
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{Lets have segfaults!}
+  \begin{minted}[fontsize=\footnotesize,breaklines]{bash}
+Thread 44 "rustc" received signal SIGSEGV, Segmentation fault.
+[Switching to Thread 0x7fffe63ff700 (LWP 4960)]
+0x00007fffef451493 in (anonymous namespace)::AddressingModeMatcher::matchOperationAddr(llvm::User*, unsigned int, unsigned int, bool*) [clone .part.974] ()
+   from /home/roughl/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/../lib/../lib/../lib/librustc_llvm-6d0682d527efa802.so
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c]{You were the chosen one!}
+  \centering
+  \includegraphics[width=.8\textwidth]{img/not-so-safe-rust.jpg}
+\end{frame}
+
 \section{Future}
 
 \begin{frame}[c]{Embedded Rust in 2018}
