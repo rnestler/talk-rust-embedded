@@ -195,14 +195,34 @@ cp blink.bin /run/media/roughl/MBED
 
 
 \begin{frame}[c]{\url{https://www.tockos.org/}}
+  \centering
+  \includegraphics[width=.8\textwidth]{img/tock.png}
+
+  \begin{quote}
+    An embedded operating system designed for running multiple concurrent,
+    mutually distrustful applications on low-memory and low-power
+    microcontrollers.
+  \end{quote}
+\end{frame}
+
+\begin{frame}[c]{tockos}
   \begin{itemize}
-      \item \ldots
+    \item Uses ``capsules'' for kernel component isolation
+    \item Memory Protection Units (MPU) based isolation for processes
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{xargo}
+\begin{frame}[c]{xargo, svd2rust, cortex-m-quickstart}
   \begin{itemize}
-      \item \ldots
+    \item xargo\footnote{\url{https://github.com/japaric/xargo}}:
+      The sysroot manager that lets you build and customize std
+
+    \item svd2rust\footnote{\url{https://github.com/japaric/svd2rust}}:
+      Generate Rust register maps (structs) from SVD files
+
+    \item cortex-m-quickstart\footnote{\url{https://github.com/japaric/cortex-m-quickstart}}:
+      A template for building applications for ARM Cortex-M microcontrollers
+    \item<2-> Brought to you by the amazing japaric!
   \end{itemize}
 \end{frame}
 
