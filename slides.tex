@@ -247,27 +247,185 @@ cp blink.bin /run/media/roughl/MBED
   \includegraphics[width=.8\textwidth]{img/port-all-the-things.jpg}
 \end{frame}
 
-\begin{frame}[c]{cortex-m-quickstart}
-  \ldots
+\begin{frame}[c,fragile]{cortex-m-quickstart}
+  \begin{minted}[fontsize=\footnotesize]{bash}
+  $ git clone git@github.com:japaric/cortex-m-quickstart.git
+  $ cd cortex-m-quickstart
+  $ vim .cargo/config
+  # Cortex-M0 -> thumbv6
+  # (https://en.wikipedia.org/wiki/ARM_Cortex-M)
+  +[build]
+  +target = "thumbv6m-none-eabi"
+  $ vim memory.x # from datasheet
+  FLASH : ORIGIN = 0x00000000, LENGTH = 32K
+  RAM : ORIGIN = 0x10000000, LENGTH = 6K
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{cortex-m-quickstart}
+  \begin{minted}[fontsize=\footnotesize]{bash}
+  # Install / Update xargo (using stable rust)
+  $ cargo install xargo --force
+  # Use nightly
+  $ rustup override set nightly
+  $ rustc --version
+  rustc 1.25.0-nightly (21882aad7 2018-01-28)
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{Hello World using semi hosting\footnote{\url{http://blog.japaric.io/quickstart}}}
+  \begin{minted}[fontsize=\footnotesize]{bash}
+  $ xargo build --release --example hello
+  # jlink.cfg
+    interface jlink
+    transport select swd
+  # lpc11xx.cfg
+  # NXP LPC11xx Cortex-M0 with at least 1kB SRAM
+  set CHIPNAME lpc11xx
+  set CHIPSERIES lpc1100
+  if { ![info exists WORKAREASIZE] } {
+    set WORKAREASIZE 0x400
+  }
+  source [find target/lpc1xxx.cfg]
+  adapter_khz 4000
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{Hello World using semi hosting\footnote{\url{http://blog.japaric.io/quickstart}}}
+  \begin{minted}[fontsize=\footnotesize,breaklines]{bash}
+  $ openocd -f jlink.cfg -f lpc11xx.cfg -c 'init; reset; halt'
+  # separate shell
+  $ arm-none-eabi-gdb target/thumbv6m-none-eabi/release/examples/hello
+  (gdb) c
+  # You should see "Hello, World" in the openocd console
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{Hello World explained}
+  \begin{minted}[fontsize=\small]{rust}
+...
+use cortex_m_semihosting::hio;
+...
+fn main() {
+    let mut stdout = hio::hstdout().unwrap();
+    writeln!(stdout, "Hello, world!").unwrap();
+}
+  \end{minted}
+\pause Semi hosting: Kind of ``system calls'' for the debugger
+  \begin{itemize}
+    \item Break point
+    \item Content in register defines which function
+    \item Debugger reads memory
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]{Creating a LPC11Uxx crate\footnote{\url{https://crates.io/crates/lpc11uxx}}}
+  \begin{itemize}
+    \item SVD (System View Descriptions) files describe the registers of an MCU
+    \item Part of the CMSIS (Cortex Microcontroller Software Interface Standard)
+      \footnote{\url{https://developer.arm.com/embedded/cmsis}}
+    \item svd2rust translates them to Rust code!
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]{Sadly most of the contain errors}
+  \begin{minted}[fontsize=\tiny]{bash}
+commit 384788a06d52b82e6281abb54bd79de64e7f93c8
+Author: Raphael Nestler <raphael.nestler@gmail.com>
+Date:   Thu Dec 28 20:57:23 2017 +0100
+
+    Fix reset value of the SYSAHBCLKCTRL register
+
+    According to the datasheet (and reality) the reset value is 0x3F.
+
+commit 45f06531715954dffa0838c7d6fb1b92359b15cc
+Author: Raphael Nestler <raphael.nestler@gmail.com>
+Date:   Thu Dec 28 13:34:22 2017 +0100
+
+    Fix snake_case errors in SVD file
+
+commit 82663b47377ce0dfbe8bcf84483e7f5b38b57c77
+Author: Raphael Nestler <raphael.nestler@gmail.com>
+Date:   Thu Dec 28 13:30:49 2017 +0100
+
+    Fix duplicate names in SVD file
+
+commit b2c2cf474ddef34872e247b1a701befbec7aeef1
+Author: Raphael Nestler <raphael.nestler@gmail.com>
+Date:   Thu Dec 28 03:26:02 2017 +0100
+
+    Add svd file
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{svd2rust app code}
+  \begin{minted}[fontsize=\footnotesize]{rust}
+    use lpc11uxx::{IOCON, GPIO_PORT};
+    let iocon = IOCON.get();
+    let gpio = GPIO_PORT.get();
+
+    unsafe {
+      (*iocon).pio1_22.write(|w| w
+          .func().pio1_22_()
+          .mode().inactive_no_pull_do());
+      (*iocon).pio0_17.write(|w| w
+          .func().pio0_17_()
+          .mode().inactive_no_pull_do());
+      (*iocon).pio1_16.write(|w| w
+          .func().pio1_16_()
+          .mode().inactive_no_pull_do());
+    }
+  \end{minted}
 \end{frame}
 
 \section{Awesome Stuff}
 
-\begin{frame}[c]{svd2rust}
-  Compare C defines, C++ template magic, and svd2rust generated code
-  Auto-completion could be awesome!
-  No more typos or mixing up bit indices with values!
+\begin{frame}[c,fragile]{svd2rust}
+  Vendors usually provide you with C code like that
+  \begin{minted}{c}
+#define SYSOSCCTRL_Val        0x00000000              // Reset: 0x000
+#define WDTOSCCTRL_Val        0x00000000              // Reset: 0x000
+#define SYSPLLCTRL_Val        0x00000023              // Reset: 0x000
+  \end{minted}
+  No type safety (writing into wrong register, confusing bit indicies with values, ...)
+
+  svd2rust generated code provides a typo-safe way to access those.
+
+  svd2rust + auto-completion = awesome developing experience!
 \end{frame}
 
 \begin{frame}[c]{xargo}
+  \begin{itemize}
+    \item Makes cross compiling mostly painless
+  \end{itemize}
 \end{frame}
 
 \section{Painful Stuff}
 
+\begin{frame}[c]{xargo}
+  \begin{itemize}
+    \item Gets broken by Rust changes from time to time
+    \item Annoying to switch between xargo / nighly versions
+  \end{itemize}
+\end{frame}
+
 \begin{frame}[c]{Broken SVD files}
+  \begin{itemize}
+    \item Very annoying $\rightarrow$ strange behaviour in generated code
+    \item Apparently not many people are using them
+    \item Lets report errors to vendors!
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[c]{Breaking changes in nightly}
+  \begin{itemize}
+    \item According to jeparic
+      \footnote{\url{http://blog.japaric.io/embedded-rust-in-2018/}} embedded
+      code broke arround 10 times in 2017
+    \item Changes in target specification
+    \item ThinLTO broke release build linking
+    \item Parallel codegen broke debuilg build linking
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[c,fragile]{Compiler crashes}
@@ -300,7 +458,12 @@ Thread 44 "rustc" received signal SIGSEGV, Segmentation fault.
 \section{Future}
 
 \begin{frame}[c]{Embedded Rust in 2018}
-  Blogpost from jeparic?
+  \begin{itemize}
+    \item See jeparics 2018 post\footnote{\url{http://blog.japaric.io/embedded-rust-in-2018/}}
+    \item And Rust 2018 roadmap\footnote{\url{https://github.com/aturon/rfcs/blob/roadmap-2018/text/0000-roadmap-2018.md}} (released yesterday...)
+    \item<2-> Will focus on embedded domain!
+    \item<2-> Integrate xargo within cargo!
+  \end{itemize}
 \end{frame}
 
 % ----------------------------------------------------------------- %
