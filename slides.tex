@@ -92,6 +92,7 @@
     \item Dedicated, not general purpose, µC system
     \item<1-> Baremetal
     \item<1-> Low-Level
+    \item<2-> For this talk: Bare metal on Cortex-M MCUs
   \end{itemize}
 \end{frame}
 
@@ -113,7 +114,7 @@
   \end{itemize}
 \end{frame}
 
-\subsection{Notable projects}
+\section{Notable projects}
 
 \begin{frame}[c]{\url{https://zinc.rs}}
   \begin{itemize}
@@ -193,6 +194,8 @@ cp blink.bin /run/media/roughl/MBED
   \end{minted}
 \end{frame}
 
+\begin{frame}[c]{zinc.rs demo time!}
+\end{frame}
 
 \begin{frame}[c]{\url{https://www.tockos.org/}}
   \centering
@@ -291,7 +294,7 @@ cp blink.bin /run/media/roughl/MBED
   \end{minted}
 \end{frame}
 
-\begin{frame}[c,fragile]{Hello World using semi hosting\footnote{\url{http://blog.japaric.io/quickstart}}}
+\begin{frame}[c,fragile]{Hello World using semi hosting}
   \begin{minted}[fontsize=\footnotesize,breaklines]{bash}
   $ openocd -f jlink.cfg -f lpc11xx.cfg -c 'init; reset; halt'
   # separate shell
