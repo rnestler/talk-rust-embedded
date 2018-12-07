@@ -158,16 +158,51 @@
 
 \section{Getting started – STM32F3 Discovery}
 
-\begin{frame}[c]{svd2rust, cortex-m-quickstart}
+\begin{frame}[c]{Prerequisites}
+  \pause
   \begin{itemize}
-    \item svd2rust\footnote{\url{https://github.com/japaric/svd2rust}}:
-      Generate Rust register maps (structs) from SVD files
-    \item cortex-m-quickstart\footnote{\url{https://github.com/japaric/cortex-m-quickstart}}:
-      A template for building applications for ARM Cortex-M microcontrollers
-    \item<2-> Brought to you by the amazing japaric!
+    \item Target support by compiler
+    \item Libcore compiled for the target
+    \item A device crate, describes the target micro controller peripheral
+    \item Runtime to setup micro controller
   \end{itemize}
 \end{frame}
 
+\begin{frame}[c]{svd2rust}
+  \begin{itemize}
+    \item Every Cortex-M μC vendor must provide an SVD (System View
+      Descriptions) file
+    \item SVD is an XML standard to describe peripheral registers
+    \item svd2rust\footnote{\url{https://github.com/japaric/svd2rust}}:
+      Generate Rust register maps (structs) from SVD files
+    \item Done for our μC family\footnote{\url{https://github.com/japaric/stm32f30x}}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Prerequisites}
+  \begin{itemize}
+    \item Target support by compiler (check)
+    \item Libcore compiled for the target (check)
+    \item A device crate, describes the target micro controller peripheral (check)
+    \item Runtime to setup micro controller
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{cortex-m, cortex-m-rt}
+  \begin{itemize}
+    \item The cortex-m\footnote{\url{https://github.com/rust-embedded/cortex-m}} crate gives access to common low level features of all Cortex-M devices.
+    \item The cortex-m-rt\footnote{\url{https://github.com/rust-embedded/cortex-m-rt}} implements a runtime for Cortex-M μCs
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Prerequisites}
+  \begin{itemize}
+    \item Target support by compiler (check)
+    \item Libcore compiled for the target (check)
+    \item A device crate, describes the target micro controller peripheral (check)
+    \item Runtime to setup micro controller (check)
+  \end{itemize}
+\end{frame}
 
 \begin{frame}[c,fragile]{cortex-m-quickstart}
   \begin{minted}[fontsize=\footnotesize]{bash}
