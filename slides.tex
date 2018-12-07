@@ -214,22 +214,23 @@
   +[build]
   +target = "thumbv7em-none-eabihf"
   $ vim memory.x # from datasheet
-  FLASH : ORIGIN = 0x00000000, LENGTH = 32K
-  RAM : ORIGIN = 0x10000000, LENGTH = 6K
+  CCRAM : ORIGIN = 0x10000000, LENGTH = 8K
+  FLASH : ORIGIN = 0x08000000, LENGTH = 256K
+  RAM : ORIGIN = 0x20000000, LENGTH = 40K
   \end{minted}
 \end{frame}
 
 \begin{frame}[c,fragile]{cortex-m-quickstart}
   \begin{minted}[fontsize=\footnotesize]{bash}
-  # Use Beta (Or stable once 1.31 is released
-  $ rustup override set beta
+  $ rustup override set 1.31.0
   $ rustc --version
-  rustc 1.31.0-beta.17 (1a4f1f398 2018-11-25)
+  rustc 1.31.0-beta.17 (1a4f1f398 2018-11-25) // TODO update version
   # Install targets
   $ rustup target add thumbv7em-none-eabihf
   \end{minted}
 \end{frame}
 
+% TODO update link to use embedded Rust book
 \begin{frame}[c,fragile]{Hello World using semi hosting\footnote{\url{http://blog.japaric.io/quickstart}}}
   \begin{minted}[fontsize=\footnotesize]{bash}
   $ cargo install cargo-generate
