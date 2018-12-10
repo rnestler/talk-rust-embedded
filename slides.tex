@@ -164,7 +164,7 @@
   \begin{itemize}
     \item \Square Target support by compiler
     \item \Square Libcore compiled for the target
-    \item \Square A device crate (access to the target peripherals)
+    \item \Square A Peripheral Access crate (PAC)
     \item \Square Runtime to setup micro controller
   \end{itemize}
 \end{frame}
@@ -173,7 +173,7 @@
   \begin{itemize}
     \item \CheckedBox Target support by compiler
     \item \CheckedBox Libcore compiled for the target
-    \item \Square A device crate (access to the target peripherals)
+    \item \Square A Peripheral Access crate (PAC)
     \item \Square Runtime to setup micro controller
   \end{itemize}
 \end{frame}
@@ -193,7 +193,7 @@
   \begin{itemize}
     \item \CheckedBox Target support by compiler
     \item \CheckedBox Libcore compiled for the target
-    \item \CheckedBox A device crate (access to the target peripherals)
+    \item \CheckedBox A Peripheral Access crate (PAC)
     \item \Square Runtime to setup micro controller
   \end{itemize}
 \end{frame}
@@ -214,10 +214,22 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c,fragile]{cortex-m-quickstart}
+\begin{frame}[c,fragile]{Install Toolchain\footnote{\url{https://rust-embedded.github.io/book/intro/tooling.html}}}
   \begin{minted}[fontsize=\footnotesize]{bash}
-  $ git clone git@github.com:japaric/cortex-m-quickstart.git
-  $ cd cortex-m-quickstart
+  $ rustup override set 1.31.0
+  $ rustc --version
+  rustc 1.31.0 (abe02cefd 2018-12-04)
+  $ rustup target add thumbv7em-none-eabihf
+  $ rustup component add llvm-tools-preview
+  $ cargo install cargo-generate
+  $ cargo install cargo-binutils
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{cortex-m-quickstart}
+  \begin{minted}[fontsize=\footnotesize,breaklines]{bash}
+  $ cargo generate --git https://github.com/rust-embedded/cortex-m-quickstart --name hello-discovery
+  $ cd hello-discovery
   $ vim .cargo/config
   # Cortex-M4 -> thumbv7em
   # (https://en.wikipedia.org/wiki/ARM_Cortex-M)
@@ -227,69 +239,63 @@
   CCRAM : ORIGIN = 0x10000000, LENGTH = 8K
   FLASH : ORIGIN = 0x08000000, LENGTH = 256K
   RAM : ORIGIN = 0x20000000, LENGTH = 40K
+  $ cargo build
   \end{minted}
 \end{frame}
 
-\begin{frame}[c,fragile]{cortex-m-quickstart}
-  \begin{minted}[fontsize=\footnotesize]{bash}
-  $ rustup override set 1.31.0
-  $ rustc --version
-  rustc 1.31.0-beta.17 (1a4f1f398 2018-11-25) // TODO update version
-  # Install targets
-  $ rustup target add thumbv7em-none-eabihf
-  \end{minted}
-\end{frame}
-
-% TODO update link to use embedded Rust book
-\begin{frame}[c,fragile]{Hello World using semi hosting\footnote{\url{http://blog.japaric.io/quickstart}}}
-  \begin{minted}[fontsize=\footnotesize]{bash}
-  $ cargo install cargo-generate
-  $ cargo build --release --example hello
-  # jlink.cfg
-    interface jlink
-    transport select swd
-  # lpc11xx.cfg
-  # NXP LPC11xx Cortex-M0 with at least 1kB SRAM
-  set CHIPNAME lpc11xx
-  set CHIPSERIES lpc1100
-  if { ![info exists WORKAREASIZE] } {
-    set WORKAREASIZE 0x400
-  }
-  source [find target/lpc1xxx.cfg]
-  adapter_khz 4000
-  \end{minted}
-\end{frame}
-
-\begin{frame}[c,fragile]{Hello World using semi hosting}
+\begin{frame}[c,fragile]{Building / Running}
   \begin{minted}[fontsize=\footnotesize,breaklines]{bash}
-  $ openocd -f jlink.cfg -f lpc11xx.cfg -c 'init; reset; halt'
-  # separate shell
-  $ arm-none-eabi-gdb target/thumbv6m-none-eabi/release/examples/hello
-  (gdb) c
-  # You should see "Hello, World" in the openocd console
+  $ cargo build --example hello
+  # separate terminal
+  $ openocd openocd.cfg
+  # Optional if the above fails
+  $ lsusb|grep ST-LINK
+  Bus 001 Device 004: ID 0483:374b STMicroelectronics ST-LINK/V2.1
+  $ sudo chgrp input /dev/bus/usb/001/004
+  $ arm-none-eabi-gdb -x openocd.gdb -q target/thumbv7em-none-eabihf/debug/examples/hello
+  ...
+  (gdb) continue
+  # Other terminal
+  Hello, world!
+  semihosting: *** application exited ***
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c]{Semihosting? Sorcery!}
+  \centering
+  \includegraphics[width=.7\textwidth]{img/what-sorcery-is-this.jpg}
+\end{frame}
+
+\begin{frame}[c,fragile]{Hello World using semi hosting\footnote{\url{https://rust-embedded.github.io/book/start/semihosting.html}}}
+  Kind of ``system calls'' into debugger
+  \begin{itemize}
+    \item Breakpoint instruction with a special tag. $\rightarrow$ Debugger
+      gets notified.
+    \item Two registers indicate which procedure call and points to a structure
+      with arguments.
+    \item The debugger reads the memory to retrieve the arguments and passes
+      these on to the host's procedure.
+    \item The target's CPU is unhalted and execution continues.
+  \end{itemize}
+  \begin{minted}[fontsize=\footnotesize]{bash}
   \end{minted}
 \end{frame}
 
 \begin{frame}[c,fragile]{Hello World explained}
   \begin{minted}[fontsize=\small]{rust}
-...
-use cortex_m_semihosting::hio;
-...
-fn main() {
-    let mut stdout = hio::hstdout().unwrap();
-    writeln!(stdout, "Hello, world!").unwrap();
-}
+  ...
+  use cortex_m_semihosting::hprintln;
+  ...
+  #[entry]
+  fn main() -> ! {
+    hprintln!("Hello, world!").unwrap();
+    loop {}
+  }
   \end{minted}
-\pause Semi hosting: Kind of ``system calls'' for the debugger
-  \begin{itemize}
-    \item Break point
-    \item Content in register defines which function
-    \item Debugger reads memory
-  \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{Demo time! --- Hello World}
-\end{frame}
+\section{RTFM}
+\subsection{Real Time For The Masses}
 
 \section{Future}
 
