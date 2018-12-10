@@ -11,6 +11,8 @@
 \usepackage{alltt}
 \newcommand\hi[1]{{\color{mainorange} \textbf{#1}}}
 
+\usepackage{wasysym}
+
 % Custom unicode symbols
 \usepackage{newunicodechar}
 \newcommand\Warning{%
@@ -159,12 +161,20 @@
 \section{Getting started – STM32F3 Discovery}
 
 \begin{frame}[c]{Prerequisites}
-  \pause
   \begin{itemize}
-    \item Target support by compiler
-    \item Libcore compiled for the target
-    \item A device crate, describes the target micro controller peripheral
-    \item Runtime to setup micro controller
+    \item \Square Target support by compiler
+    \item \Square Libcore compiled for the target
+    \item \Square A device crate (access to the target peripherals)
+    \item \Square Runtime to setup micro controller
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Prerequisites}
+  \begin{itemize}
+    \item \CheckedBox Target support by compiler
+    \item \CheckedBox Libcore compiled for the target
+    \item \Square A device crate (access to the target peripherals)
+    \item \Square Runtime to setup micro controller
   \end{itemize}
 \end{frame}
 
@@ -181,10 +191,10 @@
 
 \begin{frame}[c]{Prerequisites}
   \begin{itemize}
-    \item Target support by compiler (check)
-    \item Libcore compiled for the target (check)
-    \item A device crate, describes the target micro controller peripheral (check)
-    \item Runtime to setup micro controller
+    \item \CheckedBox Target support by compiler
+    \item \CheckedBox Libcore compiled for the target
+    \item \CheckedBox A device crate (access to the target peripherals)
+    \item \Square Runtime to setup micro controller
   \end{itemize}
 \end{frame}
 
@@ -197,10 +207,10 @@
 
 \begin{frame}[c]{Prerequisites}
   \begin{itemize}
-    \item Target support by compiler (check)
-    \item Libcore compiled for the target (check)
-    \item A device crate, describes the target micro controller peripheral (check)
-    \item Runtime to setup micro controller (check)
+    \item \CheckedBox Target support by compiler
+    \item \CheckedBox Libcore compiled for the target
+    \item \CheckedBox A device crate (access to the target peripherals)
+    \item \CheckedBox Runtime to setup micro controller
   \end{itemize}
 \end{frame}
 
