@@ -443,6 +443,34 @@ idle
   \end{minted}
 \end{frame}
 
+\begin{frame}[c,fragile]{Late Resources}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/late-resources}}
+
+  Like static, but initialized in \texttt{init()}
+
+  \begin{minted}[fontsize=\tiny]{rust}
+...
+
+const APP: () = {
+    static mut LEDS: Leds = ();
+    static mut DELAY: Delay = ();
+
+    ...
+
+    #[init]
+    fn init() {
+      ...
+
+      LEDS = Leds::new(gpioe);
+      DELAY = Delay::new(core.SYST, clocks);
+    }
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{Late Resources}
+  Demo Time!
+\end{frame}
+
 \section{Future}
 
 \begin{frame}[c]{More targets}
