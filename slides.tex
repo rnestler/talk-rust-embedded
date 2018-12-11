@@ -324,7 +324,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c,fragile]{Minimal Example}
+\begin{frame}[fragile]{Minimal Example}
   \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/minimal-example}}
   \begin{minted}[fontsize=\tiny]{rust}
 #![no_std]
@@ -349,7 +349,7 @@ const APP: () = {
   \end{minted}
 \end{frame}
 
-\begin{frame}[c,fragile]{Minimal Example}
+\begin{frame}[fragile]{Minimal Example}
   \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/minimal-example}}
 
   Output:
@@ -359,7 +359,7 @@ const APP: () = {
   \end{minted}
 \end{frame}
 
-\begin{frame}[c,fragile]{Switching contexts}
+\begin{frame}[fragile]{Switching contexts}
   \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/first-demo}}
   \begin{minted}[fontsize=\tiny]{rust}
 #[app(device = stm32f30x)]
@@ -387,7 +387,7 @@ const APP: () = {
 \end{frame}
 
 
-\begin{frame}[c,fragile]{Switching contexts}
+\begin{frame}[fragile]{Switching contexts}
   \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/first-demo}}
 
   Output:
@@ -400,7 +400,7 @@ const APP: () = {
   \end{minted}
 \end{frame}
 
-\begin{frame}[c,fragile]{Sharing Resources}
+\begin{frame}[fragile]{Sharing Resources}
   \tiny{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/shared-resources}}
   \begin{minted}[fontsize=\tiny]{rust}
 #[app(device = stm32f30x)]
@@ -432,7 +432,7 @@ const APP: () = {
   \end{minted}
 \end{frame}
 
-\begin{frame}[c,fragile]{Sharing Resources}
+\begin{frame}[fragile]{Sharing Resources}
   \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/shared-resources}}
 
   Output:
@@ -444,7 +444,7 @@ idle
   \end{minted}
 \end{frame}
 
-\begin{frame}[c,fragile]{Late Resources}
+\begin{frame}[fragile]{Late Resources}
   \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/late-resources}}
 
   Like static, but initialized in \texttt{init()}
@@ -473,7 +473,7 @@ const APP: () = {
   Demo Time!
 \end{frame}
 
-\begin{frame}[c,fragile]{Timer Queue}
+\begin{frame}[fragile]{Timer Queue}
   \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/timer}}
 
   Needs a feature flag. Also delay won't be available.
@@ -485,10 +485,8 @@ features= ["timer-queue"]
   \end{minted}
 \end{frame}
 
-\begin{frame}[c,fragile]{Timer Queue}
+\begin{frame}[fragile]{Timer Queue}
   \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/timer}}
-
-  Needs a feature flag. Also delay won't be available.
 
   \begin{minted}[fontsize=\tiny]{rust}
     ...
