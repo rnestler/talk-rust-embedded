@@ -473,6 +473,51 @@ const APP: () = {
   Demo Time!
 \end{frame}
 
+\begin{frame}[c,fragile]{Timer Queue}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/timer}}
+
+  Needs a feature flag. Also delay won't be available.
+
+  \begin{minted}[fontsize=\tiny]{ini}
+[dependencies.cortex-m-rtfm]
+git = "https://github.com/japaric/cortex-m-rtfm.git"
+features= ["timer-queue"]
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{Timer Queue}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/timer}}
+
+  Needs a feature flag. Also delay won't be available.
+
+  \begin{minted}[fontsize=\tiny]{rust}
+    ...
+    #[init(schedule = [leds])]
+    fn init() {
+        ...
+        let now = Instant::now();
+        schedule.leds(now + PERIOD.cycles()).unwrap();
+        ...
+    }
+    #[task(resources = [LEDS], schedule = [leds])]
+    fn leds() {
+        static mut curr: usize = 0;
+        schedule.leds(scheduled + PERIOD.cycles()).unwrap();
+        resources.LEDS[*curr].off();
+        *curr += 1;
+        if *curr > 7 {
+            *curr = 0;
+        }
+        resources.LEDS[*curr].on();
+    }
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{Timer Queue}
+  Demo Time!
+\end{frame}
+
+
 \section{Future}
 
 \begin{frame}[c]{More targets}
