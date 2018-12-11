@@ -311,6 +311,93 @@
   The cortex-m-rtfm book \footnote{\url{https://japaric.github.io/cortex-m-rtfm/book/preface.html}}
 \end{frame}
 
+\begin{frame}[c]{Features of RTFM}
+  \begin{itemize}
+      \item Tasks Triggered asynchronously or by the application
+      \item Message Passing between tasks
+      \item Timer queue (schedule in the future, periodic)
+      \item Priorization of tasks
+      \item Efficient and data race free memory sharing
+      \item \strong{Deadlock free execution} guaranteed at compile time.
+      \item Uses the hardware for scheduling
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]{Minimal Example}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/minimal-example}}
+  \begin{minted}[fontsize=\tiny]{rust}
+#![no_std]
+#![no_main]
+extern crate panic_semihosting; // logs messages to the host stderr; requires a debugger
+
+use cortex_m_semihosting::hprintln;
+use rtfm::app;
+
+#[app(device = stm32f30x)]
+const APP: () = {
+    #[init]
+    fn init() {
+        hprintln!("init").unwrap();
+    }
+    #[idle]
+    fn idle() -> ! {
+        hprintln!("idle").unwrap();
+        loop {}
+    }
+};
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{Minimal Example}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/minimal-example}}
+  Output:
+  \begin{minted}[fontsize=\tiny]{rust}
+    init
+    idle
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{Switching contexts}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/first-demo}}
+  \begin{minted}[fontsize=\tiny]{rust}
+#[app(device = stm32f30x)]
+const APP: () = {
+    #[init]
+    fn init() {
+        rtfm::pend(Interrupt::SPI1);
+        hprintln!("init").unwrap();
+    }
+    #[idle]
+    fn idle() -> ! {
+        hprintln!("idle").unwrap();
+        rtfm::pend(Interrupt::SPI1);
+        hprintln!("idle 2").unwrap();
+        loop {}
+    }
+    #[interrupt]
+    fn SPI1() {
+        static mut TIMES: u32 = 0;
+        *TIMES += 1; // Safe access to local `static mut` variable
+        hprintln!("SPI1 called {} time{}", *TIMES, if *TIMES > 1 { "s" } else { "" }).unwrap();
+    }
+};
+  \end{minted}
+\end{frame}
+
+
+\begin{frame}[c,fragile]{Switching contexts}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/first-demo}}
+  Output:
+  \begin{minted}[fontsize=\tiny]{rust}
+    init
+    SPI1 called 1 time
+    idle
+    SPI1 called 2 times
+    idle 2
+  \end{minted}
+\end{frame}
+
+
 \section{Future}
 
 \begin{frame}[c]{More targets}
