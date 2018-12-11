@@ -350,8 +350,9 @@ const APP: () = {
 
 \begin{frame}[c,fragile]{Minimal Example}
   \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/minimal-example}}
+
   Output:
-  \begin{minted}[fontsize=\tiny]{rust}
+  \begin{minted}[fontsize=\small]{rust}
     init
     idle
   \end{minted}
@@ -387,8 +388,9 @@ const APP: () = {
 
 \begin{frame}[c,fragile]{Switching contexts}
   \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/first-demo}}
+
   Output:
-  \begin{minted}[fontsize=\tiny]{rust}
+  \begin{minted}[fontsize=\small]{rust}
     init
     SPI1 called 1 time
     idle
@@ -397,6 +399,49 @@ const APP: () = {
   \end{minted}
 \end{frame}
 
+\begin{frame}[c,fragile]{Sharing Resources}
+  \tiny{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/shared-resources}}
+  \begin{minted}[fontsize=\tiny]{rust}
+#[app(device = stm32f30x)]
+const APP: () = {
+    static mut SHARED: u32 = 0; // A resource
+    #[init]
+    fn init() {
+        rtfm::pend(Interrupt::SPI1);
+        rtfm::pend(Interrupt::SPI2);
+        hprintln!("init").unwrap();
+    }
+    #[idle]
+    fn idle() -> ! {
+        hprintln!("idle").unwrap();
+        // *resources.SHARED += 1; // doesn't compile
+        loop {}
+    }
+    #[interrupt(resources = [SHARED])]
+    fn SPI1() {
+        *resources.SHARED += 1;
+        hprintln!("SPI1: SHARED = {}", resources.SHARED).unwrap();
+    }
+    #[interrupt(resources = [SHARED])]
+    fn SPI2() {
+        *resources.SHARED += 1;
+        hprintln!("SPI2: SHARED = {}", resources.SHARED).unwrap();
+    }
+};
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{Sharing Resources}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/shared-resources}}
+
+  Output:
+  \begin{minted}[fontsize=\small]{rust}
+init
+SPI1: SHARED = 1
+SPI2: SHARED = 2
+idle
+  \end{minted}
+\end{frame}
 
 \section{Future}
 
