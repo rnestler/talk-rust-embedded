@@ -450,19 +450,20 @@ idle
 
   \begin{minted}[fontsize=\tiny]{rust}
 ...
-
 const APP: () = {
     static mut LEDS: Leds = ();
     static mut DELAY: Delay = ();
 
-    ...
-
     #[init]
     fn init() {
-      ...
-
-      LEDS = Leds::new(gpioe);
-      DELAY = Delay::new(core.SYST, clocks);
+        ...
+        LEDS = Leds::new(gpioe);
+        DELAY = Delay::new(core.SYST, clocks);
+    }
+    #[idle(resources = [LEDS, DELAY])]
+    fn idle() -> ! {
+        let n = resources.LEDS.len();
+        ...
     }
   \end{minted}
 \end{frame}
