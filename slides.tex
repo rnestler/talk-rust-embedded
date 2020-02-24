@@ -11,6 +11,8 @@
 \usepackage{alltt}
 \newcommand\hi[1]{{\color{mainorange} \textbf{#1}}}
 
+\usepackage{wasysym}
+
 % Custom unicode symbols
 \usepackage{newunicodechar}
 \newcommand\Warning{%
@@ -40,7 +42,7 @@
 
 % Meta
 \title{Embedded Rust}
-\date{2018-01-30}
+\date{2018-12-11}
 \author{Raphael Nestler (@rnestler)}
 \institute{Rust Zürichsee Meetup}
 
@@ -53,7 +55,7 @@
 
 % ----------------------------------------------------------------- %
 
-\begin{frame}[c]{println!("{:?}", Self)}
+\begin{frame}[c]{println!("\{:?\}", self)}
   Hi! I'm Raphael (@rnestler).
 
   \pause I live in Rapperswil
@@ -114,364 +116,432 @@
   \end{itemize}
 \end{frame}
 
-\section{Notable projects}
-
-\begin{frame}[c]{\url{https://zinc.rs}}
+\section{State of Embedded in 2018}
+\begin{frame}[c]{You can use stable!}
   \begin{itemize}
-      \item Proof-of-concept, currently abondoned
-      \item Descripe system in a DSL (platformtree)
-      \item Use macros to convert into setup code
-      \item Promising concept!
+    \item Previously we needed nightly for \texttt{no\_std} binaries
+    \item Rust 1.6 \texttt{no\_std / libcore} gets
+      introduced\footnote{\url{https://blog.rust-lang.org/2016/01/21/Rust-1.6.html}}
+    \item Rust 1.27 cortex-m embedded libraries possible on stable\footnote{\url{https://twitter.com/japaricious/status/995633889858277376}}
+    \item Rust 1.30 embedded binaries possible on
+      stable\footnote{\url{https://blog.rust-lang.org/2018/10/25/Rust-1.30.0.html}}
+    \item I recommend to use Rust 1.31 2018 edition (Released recently)
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c,fragile]{Platformtree}
-  \begin{minted}[fontsize=\small]{rust}
-platformtree!(
-  // use lpc17xx
-  lpc17xx@mcu {
-    clock {
-      // source is clocked from main (external) oscillator running at 12MHz
-      source = "main-oscillator";
-      source_frequency = 12_000_000;
-      // configure pll to output 100MHz
-      pll {
-        m = 50;
-        n = 3;
-        divisor = 4;
-      }
-    }
-  \end{minted}
-\end{frame}
-
-\begin{frame}[c,fragile]{Platformtree}
-  \begin{minted}[fontsize=\small]{rust}
-    timer {
-      // define configuration for timer 1
-      timer@1 {
-        counter = 25;
-        divisor = 4;
-      }
-    }
-    gpio {
-      // define pins for gpio port 1
-      1 {
-        // pins 18 and 20 are gpio out
-        led1@18 { direction = "out"; }
-        led2@20 { direction = "out"; }
-      }
-  \end{minted}
-\end{frame}
-
-\begin{frame}[c,fragile]{zinc.rs app code}
-  \begin{minted}[fontsize=\small]{rust}
-fn run(args: &pt::run_args) {
-  // toggles pin values
-  args.led1.set_high();
-  args.led2.set_low();
-  // wait for 1 second
-  (args.timer as &zinc::hal::timer::Timer).wait(1);
-
-  args.led1.set_low();
-  args.led2.set_high();
-  (args.timer as &zinc::hal::timer::Timer).wait(1);
-}
-  \end{minted}
-\end{frame}
-
-\begin{frame}[fragile]{Getting started with zinc.rs}
-  \begin{minted}[fontsize=\small]{bash}
-# Old nightly
-rustup override set nightly-2016-09-17
-# downgrade xargo
-cargo install xargo --version 0.2.0 --force
-# build and download
-cd examples/blink_lpc17xx
-xargo build --release --target thumbv7m-none-eabi
-arm-none-eabi-objcopy -O binary\
-  ./target/thumbv7m-none-eabi/release/blink blink.bin
-cp blink.bin /run/media/roughl/MBED
-  \end{minted}
-\end{frame}
-
-\begin{frame}[c]{zinc.rs demo time!}
-\end{frame}
-
-\begin{frame}[c]{\url{https://www.tockos.org/}}
+\begin{frame}[c]{You can use stable!\footnote{\url{https://hacks.mozilla.org/2018/12/rust-2018-is-here/}}}
   \centering
-  \includegraphics[width=.8\textwidth]{img/tock.png}
-
-  \begin{quote}
-    An embedded operating system designed for running multiple concurrent,
-    mutually distrustful applications on low-memory and low-power
-    microcontrollers.
-  \end{quote}
+  \includegraphics[width=.6\textwidth]{img/embedded-is-stable.png}
 \end{frame}
 
-\begin{frame}[c]{tockos}
+\begin{frame}[c]{No more lib core cross compiling}
   \begin{itemize}
-    \item Uses ``capsules'' for kernel component isolation
-    \item Memory Protection Units (MPU) based isolation for processes
+    \item Previously we needed to use
+      xargo\footnote{\url{https://github.com/japaric/xargo}} to cross compile
+      lib core
+    \item Now Cortex-M targets are supported by rustup / cargo
+      (thumbvxx-none-eabi)
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{xargo, svd2rust, cortex-m-quickstart}
+\begin{frame}[c]{Collaborative Effort}
   \begin{itemize}
-    \item xargo\footnote{\url{https://github.com/japaric/xargo}}:
-      The sysroot manager that lets you build and customize std
+    \item Rust Embedded Working Group
+    \item Started in the beginning of 2018\footnote{\url{https://rust-embedded.github.io/blog/2018-03-15-newsletter-1/}}
+    \item Works on
+      \begin{itemize}
+        \item Documentation (Blog posts, The Embedded Rust Book, \ldots)
+        \item Tooling (LLVM, rustc, \ldots)
+        \item Standartization in the ecosystem (embedded-hal, \ldots)
+      \end{itemize}
+  \end{itemize}
+\end{frame}
 
+\begin{frame}[c]{More Resources}
+  \begin{itemize}
+    \item The Rust Embedded Book\footnote{\url{https://docs.rust-embedded.org/book/}}
+    \item The Embedded Bookshelf\footnote{\url{https://docs.rust-embedded.org/}}
+    \item The Discovery book\footnote{\url{https://docs.rust-embedded.org/discovery/index.html}}
+    \item Awesome Embedded Rust\footnote{\url{https://github.com/rust-embedded/awesome-embedded-rust}}
+  \end{itemize}
+\end{frame}
+
+\section{Getting started – STM32F3 Discovery}
+
+\begin{frame}[c]{Prerequisites}
+  \begin{itemize}
+    \item \Square Target support by compiler
+    \item \Square Libcore compiled for the target
+    \item \Square A Peripheral Access Crate (PAC)
+    \item \Square Runtime to setup micro controller
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Prerequisites}
+  \begin{itemize}
+    \item \CheckedBox Target support by compiler
+    \item \CheckedBox Libcore compiled for the target
+    \item \Square A Peripheral Access Crate (PAC)
+    \item \Square Runtime to setup micro controller
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{svd2rust}
+  \begin{itemize}
+    \item Every Cortex-M μC vendor must provide an SVD (System View
+      Descriptions) file
+    \item SVD is an XML standard to describe peripheral registers
     \item svd2rust\footnote{\url{https://github.com/japaric/svd2rust}}:
       Generate Rust register maps (structs) from SVD files
-
-    \item cortex-m-quickstart\footnote{\url{https://github.com/japaric/cortex-m-quickstart}}:
-      A template for building applications for ARM Cortex-M microcontrollers
-    \item<2-> Brought to you by the amazing japaric!
+    \item Done for our μC family\footnote{\url{https://github.com/japaric/stm32f30x}}
   \end{itemize}
 \end{frame}
 
-\section{Case study LPC11U24}
-
-\begin{frame}[c]{water-sensor project}
-  \centering
-  \includegraphics[width=.9\textwidth]{img/water-sensor-pcb.png}
-\end{frame}
-
-\begin{frame}[c]{water-sensor project}
+\begin{frame}[c]{Prerequisites}
   \begin{itemize}
-    \item ``IoT'' project from coredump.ch
-    \item µC, LoRaWAN modem, LEDs, I²C sensors
-    \item Prototype runs with mbed C++
-    \item<2-> But I had to much time at 34C3\ldots
+    \item \CheckedBox Target support by compiler
+    \item \CheckedBox Libcore compiled for the target
+    \item \CheckedBox A Peripheral Access Crate (PAC)
+    \item \Square Runtime to setup micro controller
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{tuwat!}
-  \centering
-  \includegraphics[width=.8\textwidth]{img/port-all-the-things.jpg}
+\begin{frame}[c]{cortex-m, cortex-m-rt}
+  \begin{itemize}
+    \item The cortex-m\footnote{\url{https://github.com/rust-embedded/cortex-m}} crate gives access to common low level features of all Cortex-M devices.
+    \item The cortex-m-rt\footnote{\url{https://github.com/rust-embedded/cortex-m-rt}} implements a runtime for Cortex-M μCs
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Prerequisites}
+  \begin{itemize}
+    \item \CheckedBox Target support by compiler
+    \item \CheckedBox Libcore compiled for the target
+    \item \CheckedBox A Peripheral Access Crate (PAC)
+    \item \CheckedBox Runtime to setup micro controller
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]{Install Toolchain\footnote{\url{https://rust-embedded.github.io/book/intro/tooling.html}}}
+  \begin{minted}[fontsize=\footnotesize]{bash}
+  $ rustup override set 1.31.0
+  $ rustc --version
+  rustc 1.31.0 (abe02cefd 2018-12-04)
+  $ rustup target add thumbv7em-none-eabihf
+  $ rustup component add llvm-tools-preview
+  $ cargo install cargo-generate
+  $ cargo install cargo-binutils
+  \end{minted}
 \end{frame}
 
 \begin{frame}[c,fragile]{cortex-m-quickstart}
-  \begin{minted}[fontsize=\footnotesize]{bash}
-  $ git clone git@github.com:japaric/cortex-m-quickstart.git
-  $ cd cortex-m-quickstart
+  \begin{minted}[fontsize=\footnotesize,breaklines]{bash}
+  $ cargo generate --git https://github.com/rust-embedded/cortex-m-quickstart --name hello-discovery
+  $ cd hello-discovery
   $ vim .cargo/config
-  # Cortex-M0 -> thumbv6
+  # Cortex-M4 -> thumbv7em
   # (https://en.wikipedia.org/wiki/ARM_Cortex-M)
   +[build]
-  +target = "thumbv6m-none-eabi"
+  +target = "thumbv7em-none-eabihf"
   $ vim memory.x # from datasheet
-  FLASH : ORIGIN = 0x00000000, LENGTH = 32K
-  RAM : ORIGIN = 0x10000000, LENGTH = 6K
+  CCRAM : ORIGIN = 0x10000000, LENGTH = 8K
+  FLASH : ORIGIN = 0x08000000, LENGTH = 256K
+  RAM : ORIGIN = 0x20000000, LENGTH = 40K
   \end{minted}
 \end{frame}
 
-\begin{frame}[c,fragile]{cortex-m-quickstart}
-  \begin{minted}[fontsize=\footnotesize]{bash}
-  # Install / Update xargo (using stable rust)
-  $ cargo install xargo --force
-  # Use nightly
-  $ rustup override set nightly
-  $ rustc --version
-  rustc 1.25.0-nightly (21882aad7 2018-01-28)
-  \end{minted}
-\end{frame}
-
-\begin{frame}[c,fragile]{Hello World using semi hosting\footnote{\url{http://blog.japaric.io/quickstart}}}
-  \begin{minted}[fontsize=\footnotesize]{bash}
-  $ xargo build --release --example hello
-  # jlink.cfg
-    interface jlink
-    transport select swd
-  # lpc11xx.cfg
-  # NXP LPC11xx Cortex-M0 with at least 1kB SRAM
-  set CHIPNAME lpc11xx
-  set CHIPSERIES lpc1100
-  if { ![info exists WORKAREASIZE] } {
-    set WORKAREASIZE 0x400
-  }
-  source [find target/lpc1xxx.cfg]
-  adapter_khz 4000
-  \end{minted}
-\end{frame}
-
-\begin{frame}[c,fragile]{Hello World using semi hosting}
+\begin{frame}[c,fragile]{Building / Running}
   \begin{minted}[fontsize=\footnotesize,breaklines]{bash}
-  $ openocd -f jlink.cfg -f lpc11xx.cfg -c 'init; reset; halt'
-  # separate shell
-  $ arm-none-eabi-gdb target/thumbv6m-none-eabi/release/examples/hello
-  (gdb) c
-  # You should see "Hello, World" in the openocd console
+  $ cargo build --example hello
+  # separate terminal
+  $ openocd openocd.cfg
+  # Optional if the above fails
+  $ lsusb|grep ST-LINK
+  Bus 001 Device 004: ID 0483:374b STMicroelectronics ST-LINK/V2.1
+  $ sudo chgrp input /dev/bus/usb/001/004
+  $ arm-none-eabi-gdb -x openocd.gdb -q target/thumbv7em-none-eabihf/debug/examples/hello
+  ...
+  (gdb) continue
+  # Other terminal
+  Hello, world!
+  semihosting: *** application exited ***
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c]{Semihosting? Sorcery!}
+  \centering
+  \includegraphics[width=.7\textwidth]{img/what-sorcery-is-this.jpg}
+\end{frame}
+
+\begin{frame}[c,fragile]{Hello World using semi hosting\footnote{\url{https://rust-embedded.github.io/book/start/semihosting.html}}}
+  Kind of ``system calls'' into debugger
+  \begin{itemize}
+    \item Breakpoint instruction with a special tag. $\rightarrow$ Debugger
+      gets notified.
+    \item Two registers indicate which procedure call and points to a structure
+      with arguments.
+    \item The debugger reads the memory to retrieve the arguments and passes
+      these on to the host's procedure.
+    \item The target's CPU is unhalted and execution continues.
+  \end{itemize}
+  \begin{minted}[fontsize=\footnotesize]{bash}
   \end{minted}
 \end{frame}
 
 \begin{frame}[c,fragile]{Hello World explained}
   \begin{minted}[fontsize=\small]{rust}
-...
-use cortex_m_semihosting::hio;
-...
-fn main() {
-    let mut stdout = hio::hstdout().unwrap();
-    writeln!(stdout, "Hello, world!").unwrap();
-}
-  \end{minted}
-\pause Semi hosting: Kind of ``system calls'' for the debugger
-  \begin{itemize}
-    \item Break point
-    \item Content in register defines which function
-    \item Debugger reads memory
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c]{Demo time! --- Hello World}
-\end{frame}
-
-\begin{frame}[c,fragile]{Creating a LPC11Uxx crate\footnote{\url{https://crates.io/crates/lpc11uxx}}}
-  \begin{itemize}
-    \item SVD (System View Descriptions) files describe the registers of an MCU
-    \item Part of the CMSIS (Cortex Microcontroller Software Interface Standard)
-      \footnote{\url{https://developer.arm.com/embedded/cmsis}}
-    \item svd2rust translates them to Rust code!
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c,fragile]{Sadly most of them contain errors}
-  \begin{minted}[fontsize=\tiny]{bash}
-commit 384788a06d52b82e6281abb54bd79de64e7f93c8
-Author: Raphael Nestler <raphael.nestler@gmail.com>
-Date:   Thu Dec 28 20:57:23 2017 +0100
-
-    Fix reset value of the SYSAHBCLKCTRL register
-
-    According to the datasheet (and reality) the reset value is 0x3F.
-
-commit 45f06531715954dffa0838c7d6fb1b92359b15cc
-Author: Raphael Nestler <raphael.nestler@gmail.com>
-Date:   Thu Dec 28 13:34:22 2017 +0100
-
-    Fix snake_case errors in SVD file
-
-commit 82663b47377ce0dfbe8bcf84483e7f5b38b57c77
-Author: Raphael Nestler <raphael.nestler@gmail.com>
-Date:   Thu Dec 28 13:30:49 2017 +0100
-
-    Fix duplicate names in SVD file
-
-commit b2c2cf474ddef34872e247b1a701befbec7aeef1
-Author: Raphael Nestler <raphael.nestler@gmail.com>
-Date:   Thu Dec 28 03:26:02 2017 +0100
-
-    Add svd file
+  ...
+  use cortex_m_semihosting::hprintln;
+  ...
+  #[entry]
+  fn main() -> ! {
+    hprintln!("Hello, world!").unwrap();
+    loop {}
+  }
   \end{minted}
 \end{frame}
 
-\begin{frame}[c,fragile]{svd2rust app code}
-  \begin{minted}[fontsize=\footnotesize]{rust}
-    use lpc11uxx::{IOCON, GPIO_PORT};
-    let iocon = IOCON.get();
-    let gpio = GPIO_PORT.get();
+\section{RTFM}
+\subsection{Real Time For the Masses}
 
-    unsafe {
-      (*iocon).pio1_22.write(|w| w
-          .func().pio1_22_()
-          .mode().inactive_no_pull_do());
-      (*iocon).pio0_17.write(|w| w
-          .func().pio0_17_()
-          .mode().inactive_no_pull_do());
-      (*iocon).pio1_16.write(|w| w
-          .func().pio1_16_()
-          .mode().inactive_no_pull_do());
+\begin{frame}[c]{What is RTFM?}
+  \begin{quote}
+    Framework based on the RTFM language created by the Embedded Systems group
+    at Luleå University of Technology, led by Prof. Per Lindgren.
+  \end{quote}
+  The cortex-m-rtfm book \footnote{\url{https://japaric.github.io/cortex-m-rtfm/book/preface.html}}
+\end{frame}
+
+\begin{frame}[c]{Features of RTFM}
+  \begin{itemize}
+      \item Tasks triggered asynchronously or by the application
+      \item Message passing between tasks
+      \item Timer queue (schedule in the future, periodic)
+      \item Priorization of tasks
+      \item Efficient and data race free memory sharing
+      \item \strong{Deadlock free execution} guaranteed at compile time.
+      \item Uses the hardware for scheduling
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Minimal Example}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/minimal-example}}
+  \begin{minted}[fontsize=\tiny]{rust}
+#![no_std]
+#![no_main]
+extern crate panic_semihosting; // logs messages to the host stderr; requires a debugger
+
+use cortex_m_semihosting::hprintln;
+use rtfm::app;
+
+#[app(device = stm32f30x)]
+const APP: () = {
+    #[init]
+    fn init() {
+        hprintln!("init").unwrap();
+    }
+    #[idle]
+    fn idle() -> ! {
+        hprintln!("idle").unwrap();
+        loop {}
+    }
+};
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Minimal Example}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/minimal-example}}
+
+  Output:
+  \begin{minted}[fontsize=\small]{rust}
+    init
+    idle
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Switching contexts}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/first-demo}}
+  \begin{minted}[fontsize=\tiny]{rust}
+#[app(device = stm32f30x)]
+const APP: () = {
+    #[init]
+    fn init() {
+        rtfm::pend(Interrupt::SPI1);
+        hprintln!("init").unwrap();
+    }
+    #[idle]
+    fn idle() -> ! {
+        hprintln!("idle").unwrap();
+        rtfm::pend(Interrupt::SPI1);
+        hprintln!("idle 2").unwrap();
+        loop {}
+    }
+    #[interrupt]
+    fn SPI1() {
+        static mut TIMES: u32 = 0;
+        *TIMES += 1; // Safe access to local `static mut` variable
+        hprintln!("SPI1 called {} time{}", *TIMES, if *TIMES > 1 { "s" } else { "" }).unwrap();
+    }
+};
+  \end{minted}
+\end{frame}
+
+
+\begin{frame}[fragile]{Switching contexts}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/first-demo}}
+
+  Output:
+  \begin{minted}[fontsize=\small]{rust}
+    init
+    SPI1 called 1 time
+    idle
+    SPI1 called 2 times
+    idle 2
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Sharing Resources}
+  \tiny{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/shared-resources}}
+  \begin{minted}[fontsize=\tiny]{rust}
+#[app(device = stm32f30x)]
+const APP: () = {
+    static mut SHARED: u32 = 0; // A resource
+    #[init]
+    fn init() {
+        rtfm::pend(Interrupt::SPI1);
+        rtfm::pend(Interrupt::SPI2);
+        hprintln!("init").unwrap();
+    }
+    #[idle]
+    fn idle() -> ! {
+        hprintln!("idle").unwrap();
+        // *resources.SHARED += 1; // doesn't compile
+        loop {}
+    }
+    #[interrupt(resources = [SHARED])]
+    fn SPI1() {
+        *resources.SHARED += 1;
+        hprintln!("SPI1: SHARED = {}", resources.SHARED).unwrap();
+    }
+    #[interrupt(resources = [SHARED])]
+    fn SPI2() {
+        *resources.SHARED += 1;
+        hprintln!("SPI2: SHARED = {}", resources.SHARED).unwrap();
+    }
+};
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Sharing Resources}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/shared-resources}}
+
+  Output:
+  \begin{minted}[fontsize=\small]{rust}
+init
+SPI1: SHARED = 1
+SPI2: SHARED = 2
+idle
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Late Resources}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/late-resources}}
+
+  Like static, but initialized in \texttt{init()}
+
+  \begin{minted}[fontsize=\tiny]{rust}
+...
+const APP: () = {
+    static mut LEDS: Leds = ();
+    static mut DELAY: Delay = ();
+
+    #[init]
+    fn init() {
+        ...
+        LEDS = Leds::new(gpioe);
+        DELAY = Delay::new(core.SYST, clocks);
+    }
+    #[idle(resources = [LEDS, DELAY])]
+    fn idle() -> ! {
+        let n = resources.LEDS.len();
+        ...
     }
   \end{minted}
 \end{frame}
 
-\begin{frame}[c]{Demo Time!}
+\begin{frame}[c,fragile]{Late Resources}
+  Demo Time!
 \end{frame}
 
-\section{Awesome Stuff}
+\begin{frame}[fragile]{Timer Queue}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/timer}}
 
-\begin{frame}[c,fragile]{svd2rust}
-  Vendors usually provide you with C code like that
-  \begin{minted}{c}
-#define SYSOSCCTRL_Val        0x00000000              // Reset: 0x000
-#define WDTOSCCTRL_Val        0x00000000              // Reset: 0x000
-#define SYSPLLCTRL_Val        0x00000023              // Reset: 0x000
-  \end{minted}
-  No type safety (writing into wrong register, confusing bit indicies with values, ...)
+  Needs a feature flag. Also delay won't be available.
 
-  svd2rust generated code provides a typo-safe way to access those.
-
-  svd2rust + auto-completion = awesome developing experience!
-\end{frame}
-
-\begin{frame}[c]{xargo}
-  \begin{itemize}
-    \item Makes cross compiling mostly painless
-  \end{itemize}
-\end{frame}
-
-\section{Painful Stuff}
-
-\begin{frame}[c]{xargo}
-  \begin{itemize}
-    \item Gets broken by Rust changes from time to time
-    \item Annoying to switch between xargo / nighly versions
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c]{Broken SVD files}
-  \begin{itemize}
-    \item Very annoying $\rightarrow$ strange behaviour in generated code
-    \item Apparently not many people are using them
-    \item Lets report errors to vendors!
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c]{Breaking changes in nightly}
-  \begin{itemize}
-    \item According to jeparic
-      \footnote{\url{http://blog.japaric.io/embedded-rust-in-2018/}} embedded
-      code broke arround 10 times in 2017
-    \item Changes in target specification
-    \item ThinLTO broke release build linking
-    \item Parallel codegen broke debuilg build linking
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c,fragile]{Compiler crashes}
-  You may have seen ICE with panics\ldots
-
-  \begin{minted}[fontsize=\footnotesize,breaklines]{bash}
-Compiling water-sensor-firmware v0.1.9 (file:///home/rnestler/proggen/projects/coredump/water-sensor/water-sensor-firmware-rs)
-error: internal compiler error: /checkout/src/librustc_metadata/cstore_impl.rs:131: get_optimized_mir: missing MIR for `DefId(7/0:8 ~ cortex_m_rt[efa4]::lang_items[0]::start[0])`
-
-note: the compiler unexpectedly panicked. this is a bug.
-
-note: we would appreciate a bug report: https://github.com/rust-lang/rust/blob/master/CONTRIBUTING.md#bug-reports
+  \begin{minted}[fontsize=\tiny]{ini}
+[dependencies.cortex-m-rtfm]
+git = "https://github.com/japaric/cortex-m-rtfm.git"
+features= ["timer-queue"]
   \end{minted}
 \end{frame}
 
-\begin{frame}[c,fragile]{Lets have segfaults!}
-  \begin{minted}[fontsize=\footnotesize,breaklines]{bash}
-Thread 44 "rustc" received signal SIGSEGV, Segmentation fault.
-[Switching to Thread 0x7fffe63ff700 (LWP 4960)]
-0x00007fffef451493 in (anonymous namespace)::AddressingModeMatcher::matchOperationAddr(llvm::User*, unsigned int, unsigned int, bool*) [clone .part.974] ()
-   from /home/roughl/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/../lib/../lib/../lib/librustc_llvm-6d0682d527efa802.so
+\begin{frame}[fragile]{Timer Queue}
+  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/timer}}
+
+  \begin{minted}[fontsize=\tiny]{rust}
+    ...
+    #[init(schedule = [leds])]
+    fn init() {
+        ...
+        let now = Instant::now();
+        schedule.leds(now + PERIOD.cycles()).unwrap();
+        ...
+    }
+    #[task(resources = [LEDS], schedule = [leds])]
+    fn leds() {
+        static mut curr: usize = 0;
+        schedule.leds(scheduled + PERIOD.cycles()).unwrap();
+        resources.LEDS[*curr].off();
+        *curr += 1;
+        if *curr > 7 {
+            *curr = 0;
+        }
+        resources.LEDS[*curr].on();
+    }
   \end{minted}
 \end{frame}
 
-\begin{frame}[c]{You were the chosen one!}
-  \centering
-  \includegraphics[width=.8\textwidth]{img/not-so-safe-rust.jpg}
+\begin{frame}[c,fragile]{Timer Queue}
+  Demo Time!
 \end{frame}
+
 
 \section{Future}
 
-\begin{frame}[c]{Embedded Rust in 2018}
+\begin{frame}[c]{More targets}
   \begin{itemize}
-    \item See jeparics 2018 post\footnote{\url{http://blog.japaric.io/embedded-rust-in-2018/}}
-    \item And Rust 2018 roadmap\footnote{\url{https://github.com/aturon/rfcs/blob/roadmap-2018/text/0000-roadmap-2018.md}} (released yesterday...)
-    \item<2-> Will focus on embedded domain!
-    \item<2-> Integrate xargo within cargo!
+    \item Currently only Cortex-M are well supported
+    \item Cortex-R
+    \item MSP430
+    \item RISCV
+    \item<2-> AVR? There exits an LLVM and Rust compiler fork for it.
+    \item<2-> ESP32? Currently people experiment compiling Rust to C and then
+      to the ESP\ldots
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Ecosystem stabilization}
+  \begin{itemize}
+    \item Currently still a lot of moving pieces (svd2rust, cortex-m crates,
+      device crates, ...)
+    \item Slowing down since the Rust 2018 edition is released
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{2019 Wishlist}
+  \begin{itemize}
+    \item The Rust Embedded Working Group needs our input
+    \item \url{https://github.com/rust-embedded/wg/issues/256}
   \end{itemize}
 \end{frame}
 
