@@ -42,8 +42,8 @@
 
 % Meta
 \title{Embedded Rust}
-\date{2018-12-11}
-\author{Raphael Nestler (@rnestler)}
+\date{2020-03-16}
+\author{Raphael Nestler (@rnestler), Noah Hüsser (@Yatekii)}
 \institute{Rust Zürichsee Meetup}
 
 \begin{document}
@@ -55,7 +55,7 @@
 
 % ----------------------------------------------------------------- %
 
-\begin{frame}[c]{println!("\{:?\}", self)}
+\begin{frame}[c]{println!("\{:?\}", rnestler)}
   Hi! I'm Raphael (@rnestler).
 
   \pause I live in Rapperswil
@@ -63,6 +63,16 @@
   \pause I work at Sensirion ({\small \url{https://sensirion.com}}).
 
   \pause I'm a founding member of Coredump\\hackerspace ({\small \url{https://coredump.ch}}).
+\end{frame}
+
+\begin{frame}[c]{println!("\{:?\}", yatekii)}
+  Hi! I'm Noah (@Yatekii).
+
+  \pause I live in Lenzburg
+
+  \pause I work at Technokrat ({\small \url{https://technokrat.ch/}}).
+
+  \pause I started the probe.rs project ({\small \url{https://probe.rs}}).
 \end{frame}
 
 % ----------------------------------------------------------------- %
@@ -116,73 +126,16 @@
   \end{itemize}
 \end{frame}
 
-\section{State of Embedded in 2018}
-\begin{frame}[c]{You can use stable!}
+\section{State of Embedded in 2020}
+\begin{frame}[c]{TODO}
   \begin{itemize}
-    \item Previously we needed nightly for \texttt{no\_std} binaries
-    \item Rust 1.6 \texttt{no\_std / libcore} gets
-      introduced\footnote{\url{https://blog.rust-lang.org/2016/01/21/Rust-1.6.html}}
-    \item Rust 1.27 cortex-m embedded libraries possible on stable\footnote{\url{https://twitter.com/japaricious/status/995633889858277376}}
-    \item Rust 1.30 embedded binaries possible on
-      stable\footnote{\url{https://blog.rust-lang.org/2018/10/25/Rust-1.30.0.html}}
-    \item I recommend to use Rust 1.31 2018 edition (Released recently)
+  \item
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{You can use stable!\footnote{\url{https://hacks.mozilla.org/2018/12/rust-2018-is-here/}}}
-  \centering
-  \includegraphics[width=.6\textwidth]{img/embedded-is-stable.png}
-\end{frame}
-
-\begin{frame}[c]{No more lib core cross compiling}
+\begin{frame}[c]{Embedded HAL}
   \begin{itemize}
-    \item Previously we needed to use
-      xargo\footnote{\url{https://github.com/japaric/xargo}} to cross compile
-      lib core
-    \item Now Cortex-M targets are supported by rustup / cargo
-      (thumbvxx-none-eabi)
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c]{Collaborative Effort}
-  \begin{itemize}
-    \item Rust Embedded Working Group
-    \item Started in the beginning of 2018\footnote{\url{https://rust-embedded.github.io/blog/2018-03-15-newsletter-1/}}
-    \item Works on
-      \begin{itemize}
-        \item Documentation (Blog posts, The Embedded Rust Book, \ldots)
-        \item Tooling (LLVM, rustc, \ldots)
-        \item Standartization in the ecosystem (embedded-hal, \ldots)
-      \end{itemize}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c]{More Resources}
-  \begin{itemize}
-    \item The Rust Embedded Book\footnote{\url{https://docs.rust-embedded.org/book/}}
-    \item The Embedded Bookshelf\footnote{\url{https://docs.rust-embedded.org/}}
-    \item The Discovery book\footnote{\url{https://docs.rust-embedded.org/discovery/index.html}}
-    \item Awesome Embedded Rust\footnote{\url{https://github.com/rust-embedded/awesome-embedded-rust}}
-  \end{itemize}
-\end{frame}
-
-\section{Getting started – STM32F3 Discovery}
-
-\begin{frame}[c]{Prerequisites}
-  \begin{itemize}
-    \item \Square Target support by compiler
-    \item \Square Libcore compiled for the target
-    \item \Square A Peripheral Access Crate (PAC)
-    \item \Square Runtime to setup micro controller
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c]{Prerequisites}
-  \begin{itemize}
-    \item \CheckedBox Target support by compiler
-    \item \CheckedBox Libcore compiled for the target
-    \item \Square A Peripheral Access Crate (PAC)
-    \item \Square Runtime to setup micro controller
+  \item
   \end{itemize}
 \end{frame}
 
@@ -197,351 +150,48 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{Prerequisites}
+\begin{frame}[c]{More Resources}
   \begin{itemize}
-    \item \CheckedBox Target support by compiler
-    \item \CheckedBox Libcore compiled for the target
-    \item \CheckedBox A Peripheral Access Crate (PAC)
-    \item \Square Runtime to setup micro controller
+    \item The Rust Embedded Book\footnote{\url{https://docs.rust-embedded.org/book/}}
+    \item The Embedded Bookshelf\footnote{\url{https://docs.rust-embedded.org/}}
+    \item The Discovery book\footnote{\url{https://docs.rust-embedded.org/discovery/index.html}}
+    \item Awesome Embedded Rust\footnote{\url{https://github.com/rust-embedded/awesome-embedded-rust}}
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{cortex-m, cortex-m-rt}
+\section{Probe.rs}
+
+\begin{frame}[c]{Lack of an OS}
   \begin{itemize}
-    \item The cortex-m\footnote{\url{https://github.com/rust-embedded/cortex-m}} crate gives access to common low level features of all Cortex-M devices.
-    \item The cortex-m-rt\footnote{\url{https://github.com/rust-embedded/cortex-m-rt}} implements a runtime for Cortex-M μCs
+    \item
+    \item
+    \item
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{Prerequisites}
+\begin{frame}[c]{Solutions}
   \begin{itemize}
-    \item \CheckedBox Target support by compiler
-    \item \CheckedBox Libcore compiled for the target
-    \item \CheckedBox A Peripheral Access Crate (PAC)
-    \item \CheckedBox Runtime to setup micro controller
+    \item
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c,fragile]{Install Toolchain\footnote{\url{https://rust-embedded.github.io/book/intro/tooling.html}}}
-  \begin{minted}[fontsize=\footnotesize]{bash}
-  $ rustup override set 1.31.0
-  $ rustc --version
-  rustc 1.31.0 (abe02cefd 2018-12-04)
-  $ rustup target add thumbv7em-none-eabihf
-  $ rustup component add llvm-tools-preview
-  $ cargo install cargo-generate
-  $ cargo install cargo-binutils
-  \end{minted}
-\end{frame}
-
-\begin{frame}[c,fragile]{cortex-m-quickstart}
-  \begin{minted}[fontsize=\footnotesize,breaklines]{bash}
-  $ cargo generate --git https://github.com/rust-embedded/cortex-m-quickstart --name hello-discovery
-  $ cd hello-discovery
-  $ vim .cargo/config
-  # Cortex-M4 -> thumbv7em
-  # (https://en.wikipedia.org/wiki/ARM_Cortex-M)
-  +[build]
-  +target = "thumbv7em-none-eabihf"
-  $ vim memory.x # from datasheet
-  CCRAM : ORIGIN = 0x10000000, LENGTH = 8K
-  FLASH : ORIGIN = 0x08000000, LENGTH = 256K
-  RAM : ORIGIN = 0x20000000, LENGTH = 40K
-  \end{minted}
-\end{frame}
-
-\begin{frame}[c,fragile]{Building / Running}
-  \begin{minted}[fontsize=\footnotesize,breaklines]{bash}
-  $ cargo build --example hello
-  # separate terminal
-  $ openocd openocd.cfg
-  # Optional if the above fails
-  $ lsusb|grep ST-LINK
-  Bus 001 Device 004: ID 0483:374b STMicroelectronics ST-LINK/V2.1
-  $ sudo chgrp input /dev/bus/usb/001/004
-  $ arm-none-eabi-gdb -x openocd.gdb -q target/thumbv7em-none-eabihf/debug/examples/hello
-  ...
-  (gdb) continue
-  # Other terminal
-  Hello, world!
-  semihosting: *** application exited ***
-  \end{minted}
-\end{frame}
-
-\begin{frame}[c]{Semihosting? Sorcery!}
-  \centering
-  \includegraphics[width=.7\textwidth]{img/what-sorcery-is-this.jpg}
-\end{frame}
-
-\begin{frame}[c,fragile]{Hello World using semi hosting\footnote{\url{https://rust-embedded.github.io/book/start/semihosting.html}}}
-  Kind of ``system calls'' into debugger
+\begin{frame}[c]{What is Probe.rs}
   \begin{itemize}
-    \item Breakpoint instruction with a special tag. $\rightarrow$ Debugger
-      gets notified.
-    \item Two registers indicate which procedure call and points to a structure
-      with arguments.
-    \item The debugger reads the memory to retrieve the arguments and passes
-      these on to the host's procedure.
-    \item The target's CPU is unhalted and execution continues.
-  \end{itemize}
-  \begin{minted}[fontsize=\footnotesize]{bash}
-  \end{minted}
-\end{frame}
-
-\begin{frame}[c,fragile]{Hello World explained}
-  \begin{minted}[fontsize=\small]{rust}
-  ...
-  use cortex_m_semihosting::hprintln;
-  ...
-  #[entry]
-  fn main() -> ! {
-    hprintln!("Hello, world!").unwrap();
-    loop {}
-  }
-  \end{minted}
-\end{frame}
-
-\section{RTFM}
-\subsection{Real Time For the Masses}
-
-\begin{frame}[c]{What is RTFM?}
-  \begin{quote}
-    Framework based on the RTFM language created by the Embedded Systems group
-    at Luleå University of Technology, led by Prof. Per Lindgren.
-  \end{quote}
-  The cortex-m-rtfm book \footnote{\url{https://japaric.github.io/cortex-m-rtfm/book/preface.html}}
-\end{frame}
-
-\begin{frame}[c]{Features of RTFM}
-  \begin{itemize}
-      \item Tasks triggered asynchronously or by the application
-      \item Message passing between tasks
-      \item Timer queue (schedule in the future, periodic)
-      \item Priorization of tasks
-      \item Efficient and data race free memory sharing
-      \item \strong{Deadlock free execution} guaranteed at compile time.
-      \item Uses the hardware for scheduling
+    \item
   \end{itemize}
 \end{frame}
-
-\begin{frame}[fragile]{Minimal Example}
-  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/minimal-example}}
-  \begin{minted}[fontsize=\tiny]{rust}
-#![no_std]
-#![no_main]
-extern crate panic_semihosting; // logs messages to the host stderr; requires a debugger
-
-use cortex_m_semihosting::hprintln;
-use rtfm::app;
-
-#[app(device = stm32f30x)]
-const APP: () = {
-    #[init]
-    fn init() {
-        hprintln!("init").unwrap();
-    }
-    #[idle]
-    fn idle() -> ! {
-        hprintln!("idle").unwrap();
-        loop {}
-    }
-};
-  \end{minted}
-\end{frame}
-
-\begin{frame}[fragile]{Minimal Example}
-  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/minimal-example}}
-
-  Output:
-  \begin{minted}[fontsize=\small]{rust}
-    init
-    idle
-  \end{minted}
-\end{frame}
-
-\begin{frame}[fragile]{Switching contexts}
-  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/first-demo}}
-  \begin{minted}[fontsize=\tiny]{rust}
-#[app(device = stm32f30x)]
-const APP: () = {
-    #[init]
-    fn init() {
-        rtfm::pend(Interrupt::SPI1);
-        hprintln!("init").unwrap();
-    }
-    #[idle]
-    fn idle() -> ! {
-        hprintln!("idle").unwrap();
-        rtfm::pend(Interrupt::SPI1);
-        hprintln!("idle 2").unwrap();
-        loop {}
-    }
-    #[interrupt]
-    fn SPI1() {
-        static mut TIMES: u32 = 0;
-        *TIMES += 1; // Safe access to local `static mut` variable
-        hprintln!("SPI1 called {} time{}", *TIMES, if *TIMES > 1 { "s" } else { "" }).unwrap();
-    }
-};
-  \end{minted}
-\end{frame}
-
-
-\begin{frame}[fragile]{Switching contexts}
-  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/first-demo}}
-
-  Output:
-  \begin{minted}[fontsize=\small]{rust}
-    init
-    SPI1 called 1 time
-    idle
-    SPI1 called 2 times
-    idle 2
-  \end{minted}
-\end{frame}
-
-\begin{frame}[fragile]{Sharing Resources}
-  \tiny{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/shared-resources}}
-  \begin{minted}[fontsize=\tiny]{rust}
-#[app(device = stm32f30x)]
-const APP: () = {
-    static mut SHARED: u32 = 0; // A resource
-    #[init]
-    fn init() {
-        rtfm::pend(Interrupt::SPI1);
-        rtfm::pend(Interrupt::SPI2);
-        hprintln!("init").unwrap();
-    }
-    #[idle]
-    fn idle() -> ! {
-        hprintln!("idle").unwrap();
-        // *resources.SHARED += 1; // doesn't compile
-        loop {}
-    }
-    #[interrupt(resources = [SHARED])]
-    fn SPI1() {
-        *resources.SHARED += 1;
-        hprintln!("SPI1: SHARED = {}", resources.SHARED).unwrap();
-    }
-    #[interrupt(resources = [SHARED])]
-    fn SPI2() {
-        *resources.SHARED += 1;
-        hprintln!("SPI2: SHARED = {}", resources.SHARED).unwrap();
-    }
-};
-  \end{minted}
-\end{frame}
-
-\begin{frame}[fragile]{Sharing Resources}
-  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/shared-resources}}
-
-  Output:
-  \begin{minted}[fontsize=\small]{rust}
-init
-SPI1: SHARED = 1
-SPI2: SHARED = 2
-idle
-  \end{minted}
-\end{frame}
-
-\begin{frame}[fragile]{Late Resources}
-  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/late-resources}}
-
-  Like static, but initialized in \texttt{init()}
-
-  \begin{minted}[fontsize=\tiny]{rust}
-...
-const APP: () = {
-    static mut LEDS: Leds = ();
-    static mut DELAY: Delay = ();
-
-    #[init]
-    fn init() {
-        ...
-        LEDS = Leds::new(gpioe);
-        DELAY = Delay::new(core.SYST, clocks);
-    }
-    #[idle(resources = [LEDS, DELAY])]
-    fn idle() -> ! {
-        let n = resources.LEDS.len();
-        ...
-    }
-  \end{minted}
-\end{frame}
-
-\begin{frame}[c,fragile]{Late Resources}
-  Demo Time!
-\end{frame}
-
-\begin{frame}[fragile]{Timer Queue}
-  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/timer}}
-
-  Needs a feature flag. Also delay won't be available.
-
-  \begin{minted}[fontsize=\tiny]{ini}
-[dependencies.cortex-m-rtfm]
-git = "https://github.com/japaric/cortex-m-rtfm.git"
-features= ["timer-queue"]
-  \end{minted}
-\end{frame}
-
-\begin{frame}[fragile]{Timer Queue}
-  \small{Follow along: \url{https://github.com/rnestler/hello-rtfm-rs/tree/timer}}
-
-  \begin{minted}[fontsize=\tiny]{rust}
-    ...
-    #[init(schedule = [leds])]
-    fn init() {
-        ...
-        let now = Instant::now();
-        schedule.leds(now + PERIOD.cycles()).unwrap();
-        ...
-    }
-    #[task(resources = [LEDS], schedule = [leds])]
-    fn leds() {
-        static mut curr: usize = 0;
-        schedule.leds(scheduled + PERIOD.cycles()).unwrap();
-        resources.LEDS[*curr].off();
-        *curr += 1;
-        if *curr > 7 {
-            *curr = 0;
-        }
-        resources.LEDS[*curr].on();
-    }
-  \end{minted}
-\end{frame}
-
-\begin{frame}[c,fragile]{Timer Queue}
-  Demo Time!
-\end{frame}
-
 
 \section{Future}
 
-\begin{frame}[c]{More targets}
+\begin{frame}[c]{Where do we want to go}
   \begin{itemize}
-    \item Currently only Cortex-M are well supported
-    \item Cortex-R
-    \item MSP430
-    \item RISCV
-    \item<2-> AVR? There exits an LLVM and Rust compiler fork for it.
-    \item<2-> ESP32? Currently people experiment compiling Rust to C and then
-      to the ESP\ldots
+    \item
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{Ecosystem stabilization}
+\begin{frame}[c]{Contribute}
   \begin{itemize}
-    \item Currently still a lot of moving pieces (svd2rust, cortex-m crates,
-      device crates, ...)
-    \item Slowing down since the Rust 2018 edition is released
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c]{2019 Wishlist}
-  \begin{itemize}
-    \item The Rust Embedded Working Group needs our input
-    \item \url{https://github.com/rust-embedded/wg/issues/256}
+    \item
   \end{itemize}
 \end{frame}
 
