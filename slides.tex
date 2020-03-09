@@ -127,10 +127,30 @@
 \end{frame}
 
 \section{State of Embedded in 2020}
-\begin{frame}[c]{TODO}
+\begin{frame}[c]{The compiler}
   \begin{itemize}
-  \item
+    \item \texttt{const fn}
+      \begin{itemize}
+        \item More functions from libcore
+        \item More features (destructuring, bindings, assignment, \ldots)
+      \end{itemize}
+    \item \texttt{core::future::Future}
+    \item \texttt{alloc} crate is stable
+    \item \texttt{MaybeUninit<T>}: Fixes undefined behavior
   \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{The compiler}
+  \includegraphics[height=0.8\textheight]{img/did-i-forget-something.jpg}
+\end{frame}
+
+\begin{frame}[c]{\texttt{async} / \texttt{await} of course}
+
+  \begin{quote}
+    The \texttt{.await} is over, \texttt{async fn}s are here
+  \end{quote}
+
+  $\rightarrow$ We'll get to it
 \end{frame}
 
 \begin{frame}[c]{Embedded HAL}
