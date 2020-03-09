@@ -1,0 +1,16 @@
+{
+    "latex-workshop.view.pdf.external.viewer.command": "mupdf",
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-pdf",
+                "-e",
+                "$pdflatex=q/xelatex --shell-escape %O %S/",
+                "-shell-escape",
+                "%DOC%",
+            ]
+        }
+    ],
+}

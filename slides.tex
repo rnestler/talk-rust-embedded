@@ -118,7 +118,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{Why could Rust be awesome for it?}
+\begin{frame}[c]{Why is Rust awesome for it?}
   \begin{itemize}
     \item Zero cost abstractions!
     \item Provides safety at compiler level, not OS
@@ -159,25 +159,127 @@
   \end{itemize}
 \end{frame}
 
-\section{Probe.rs}
+\section{probe.rs}
 
-\begin{frame}[c]{Lack of an OS}
+\begin{frame}[c]{Embedded debugging}
   \begin{itemize}
-    \item
-    \item
-    \item
+    % On an x86 target you can load the program directly from disk to RAM from with in your os.
+    % Where you also coded, compiled and debugged your program.
+    % You get convenient tools for output and interaction such as the commandline, a debugger or even a webbrowser.
+    \item Software is written on a host instead of the target.
+    % On a microchip we have no such feedback.
+    % We develop the software, flash it to the microchip with a magic tool (at least to many folks it is)
+    % and hope it runs properly. Oftentimes we have to measure HW signals with some special equippment.
+    \item The microchip has no direct feedback.
+    % We need a tool to talk with the chip. We somehow need our host to talk to the microchip.
+    % To download the binary, to run a debugger and to do custom interaction.
+    % Interfaces exist, but the PC doesn't understand them. Similar to an SPI peripheral and an SPI driver,
+    % We need to write the driver for those interfaces. SWD and JTAG.
+    \item A middleman is needed (soft- \& hardware).
+    % This magic tool you always used but never really looked into is probe-rs, like many others.
+    \item probe-rs
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{Solutions}
+\begin{frame}[c]{Hardware Probes}
   \begin{itemize}
-    \item
+    \item CMSIS-DAP
+    \item ST-Link
+    \item JLink
+    \item Blackmagic Probe
+    \item ...
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{What is Probe.rs}
+\begin{frame}[c]{OpenOCD}
   \begin{itemize}
-    \item
+    \item[+] Open Source
+    \item[+] Highly configurable in TCL
+    \item[+] Very mighty
+      \begin{itemize}
+        \item Supports 20+ different probes
+        \item Supports many different CPUs
+        \item Supports various architectures
+        \item Supports SWD \& JTAG
+      \end{itemize}
+    \item[-] Ancient (released 2005, last stable release 2017)
+    \item[-] Cumbersome to install, use, maintain \& contribute
+    \item !\$ 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{pyOCD}
+  \begin{itemize}
+    \item[+] Open Source
+    \item[+] Supports CMSIS-PACKs 
+    \item Written by ARM itself
+    \item[-] Arm only
+    \item[-] Written in Python
+    \item[-] Limited and rather hard to use
+    \item[-] SWD only
+    \item[-] Supports only ST-Link and CMSIS-DAP   
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{STLink tooling}
+  \begin{itemize}
+    \item[+] Works great for ST MCUs
+    \item[+] An open source clone exists 
+    \item[-] Closed Source
+    \item[-] Written by ST
+    \item[-] Only support for ST-Links \& ST MCUs
+    \item[-] SWD only
+    \item[-] Limited featureset
+    \item \$\$ 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Segger tooling}
+  \begin{itemize}
+    \item[+] Knows ALL the CPUs and hacks to get them running
+    \item[+] SWD \& JTAG 
+    \item[-] Closed source
+    \item[-] Works only with JLinks 
+    \item[-] Tooling is highly windows \& UI oriented
+    \item[-] Inconsistent at times 
+    \item \$\$\$ (exception is EDU use)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Blackmagic probe}
+  \begin{itemize}
+    \item[+] Open Source 
+    \item[-] Everything included in the probe
+    \item[-] Fully GDB based
+    \item \$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Homebrew}
+  \begin{itemize}
+    \item Python
+    \item C
+    \item Simple scripts
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Current ecosystem}
+  \begin{itemize}
+    \item Everything is GDB based
+      \begin{itemize}
+        \item First release 1983
+        \item Protocol is serial \& ASCII based
+        \item Not intended for embedded
+        \item Codebase is suboptimal
+      \end{itemize}
+    \item Different UI for every tool
+    \item No proper integration with tools
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{So what is probe.rs?}
+  \begin{itemize}
+    \item 
   \end{itemize}
 \end{frame}
 
