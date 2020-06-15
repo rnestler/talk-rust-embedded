@@ -1,5 +1,5 @@
 LATEXMK=latexmk
-LATEXMK_ARGS=-pdf -e '$$pdflatex=q/xelatex --shell-escape %O %S/'
+LATEXMK_ARGS=-pdf -e '$$pdflatex=q/lualatex --shell-escape %O %S/'
 
 
 slides.pdf: slides.tex
