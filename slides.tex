@@ -72,7 +72,7 @@
 
   \pause I work at Technokrat ({\small \url{https://technokrat.ch/}}).
 
-  \pause I started the probe.rs project ({\small \url{https://probe.rs}}).
+  \pause I started the probe-rs project ({\small \url{https://probe-rs}}).
 \end{frame}
 
 % ----------------------------------------------------------------- %
@@ -183,9 +183,9 @@
   \end{itemize}
 \end{frame}
 
-\section{probe.rs}
+\section{Embedded development}
 
-\begin{frame}[c]{Embedded debugging}
+\begin{frame}[c]{Embedded development}
   \begin{itemize}
     % On an x86 target you can load the program directly from disk to RAM from with in your os.
     % Where you also coded, compiled and debugged your program.
@@ -207,119 +207,128 @@
 
 \begin{frame}[c]{Hardware Probes}
   \begin{itemize}
+    % This is the standard we encourage everyone to use. It is developed by ARM and supports SWD as well as JTag, which makes it suitable for RISC-V too.
+    % CMSIS-DAP has the capability to go very fast and has no hidden pitfalls or sealed behavior.
     \item CMSIS-DAP
+    % This is the debug probes provided by ST. They come in various forms and there is cheap china clones.
+    % Unfortunately their API is closed source and only reverse engineered. That by iself is manageable. But the ST-Link firmwares so some magic
+    % Which sometimes leads to unexpected results. For their v3 series they even locked usage to ST products only. This is very sad as the HW is great.
     \item ST-Link
-    \item JLink
+    % The J-Link is a properietary probe by Segger, a german company. Their probes go way back and provide the biggest and most complete featureset.
+    % The API was released in a PDF once and can be pulled from the internet time machine.
+    % There is more (and even more expensive) probes from other manufacturers which are more unknown but have the same issues & features in essence.
+    \item J-Link
+    % The Blackmagic Probe is an open source probe that can be used without any additional tooling on the PC as it has the GDB stub built in.
+    % This enables users to directly use the probe without installing anything. This is great. What's not great is that you have to update the probe firmware
+    % whenever you want to add a new target. And of course, GDB has no more right to exist in the embedded world; more on that later.
     \item Blackmagic Probe
     \item ...
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{OpenOCD}
+\begin{frame}[c]{Software Tooling}
   \begin{itemize}
-    \item[+] Open Source
-    \item[+] Highly configurable in TCL
-    \item[+] Very mighty
-      \begin{itemize}
-        \item Supports 20+ different probes
-        \item Supports many different CPUs
-        \item Supports various architectures
-        \item Supports SWD \& JTAG
-      \end{itemize}
-    \item[-] Ancient (released 2005, last stable release 2017)
-    \item[-] Cumbersome to install, use, maintain \& contribute
-    \item !\$
+    % There is a sea of tools for the various microchips there are. There is many architectures for which there are different tools each.
+    % This ensures that there is a tool for each task there is.
+    % You also have the plus of being able to choose the tool that fits you best.
+    \item[+] Diverse
+    \item[+] Huge featureset
+    % Many of those tools are directly from the manufacturers themselves. This can be a plus as the manufacturer knows their product best
+    % and is able to use this knowledge to make the best tool possible.
+    \item[+] From the manufacturers themselves
+    % The manufacturers most likely will put in the least effort to make their chips work with the tooling and don't provide any extended functionality. 
+    \item[−] From the manufacturers themselves 
+    % The tools all have different UIs and APIs. This is especially annoying when you have to work with different tools for different chips.
+    \item[−] Different interfaces
+    % Especially the good tooling is proprietary. An exception here is OpenOCD which is featureful and Open Source. 
+    % While cost can be one problem about proprietary tools, some of them are free and I mostly take issue with the fact,
+    % that if you want to use the tooling slightly different than intended by the manufacturer or happen to stumble upon a bug,
+    % you are in trouble.
+    \item[−] Proprietary
+    % Most of the existing tooling stems from old ages and oftentimes is tedious to use.
+    % Lots of weird config files or not even the possibility to really config things at all are only some of the issues here.
+    % Many of the tools offer a way to flash a chip and maybe a GDB server but that's about it.
+    % Then you are forced to do everything through GDB which is not necessarily a great choice.
+    \item[−] Cumbersome to use
+    % Many tools discourage contributions by chaotic source control (patch based gerrit with no real mainlining)
+    % or suboptimal language choices (such as Python which is not weary of any concept of bits). 
+    \item[−] Contributing discouraged
+    % GDB is used in combination with most tooling. Whilst the sanity of GDB itself is quite arguable, it is quite powerful in terms of debugging functionaility.
+    % It is a very old, more or less one-file, C codebase. The GDB API is not very modern and lacks in many points. Optimally we want to skip GDB.
+    % GDB is not embedded aware. Most of the required things for embedded have been added with the extension API of GDB, which is done differently by every tool.
+    \item[−] Everything is GDB-based
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{pyOCD}
+\begin{frame}[c]{So what is probe-rs?}
   \begin{itemize}
-    \item[+] Open Source
-    \item[+] Supports CMSIS-PACKs
-    \item Written by ARM itself
-    \item[-] Arm only
-    \item[-] Written in Python
-    \item[-] Limited and rather hard to use
-    \item[-] SWD only
-    \item[-] Supports only ST-Link and CMSIS-DAP
+    \item Rust Library
+    \item Talks to ARM and RISC-V cores
+    \item Supports CMSIS-DAP, ST-Link, J-Link
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{STLink tooling}
+\begin{frame}[c]{Why another tool?}
   \begin{itemize}
-    \item[+] Works great for ST MCUs
-    \item[+] An open source clone exists
-    \item[-] Closed Source
-    \item[-] Written by ST
-    \item[-] Only support for ST-Links \& ST MCUs
-    \item[-] SWD only
-    \item[-] Limited featureset
-    \item \$\$
+    \item Library approach
+    \item Modern low level language
+    \item Independant
+    \item Plug and play
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{Segger tooling}
-  \begin{itemize}
-    \item[+] Knows ALL the CPUs and hacks to get them running
-    \item[+] SWD \& JTAG
-    \item[-] Closed source
-    \item[-] Works only with JLinks
-    \item[-] Tooling is highly windows \& UI oriented
-    \item[-] Inconsistent at times
-    \item \$\$\$ (exception is EDU use)
-  \end{itemize}
+\begin{frame}[c,fragile]{Memory Access}
+  \begin{minted}[fontsize=\small]{rust}
+    use probe_rs::Session;
+    use probe_rs::MemoryInterface;
+
+    let mut session = Session::auto_attach("nrf52")?;
+    let mut core = session.core(0)?;
+
+    // Read a single 32 bit word.
+    let word = core.read_word_32(0x2000_0000)?;
+  \end{minted}
 \end{frame}
 
-\begin{frame}[c]{Blackmagic probe}
-  \begin{itemize}
-    \item[+] Open Source
-    \item[-] Everything included in the probe
-    \item[-] Fully GDB based
-    \item \$
-  \end{itemize}
+\begin{frame}[c,fragile]{CPU Control}
+  \begin{minted}[fontsize=\small]{rust}
+    use probe_rs::Session;
+    use probe_rs::MemoryInterface;
+
+    let mut session = Session::auto_attach("nrf52")?;
+    let mut core = session.core(0)?;
+
+    // Reset the CPU.
+    core.reset()?;
+  \end{minted}
 \end{frame}
 
-\begin{frame}[c]{Homebrew}
-  \begin{itemize}
-    \item Python
-    \item C
-    \item Simple scripts
-  \end{itemize}
+\begin{frame}[c,fragile]{Breakpoint Manipulation}
+  \begin{minted}[fontsize=\small]{rust}
+    use probe_rs::Session;
+    use probe_rs::MemoryInterface;
+
+    let mut session = Session::auto_attach("nrf52")?;
+    let mut core = session.core(0)?;
+
+    // Set a breakpoint.
+    core.set_hw_breakpoint(0x1500_2000)?;
+  \end{minted}
 \end{frame}
 
-\begin{frame}[c]{Current ecosystem}
-  \begin{itemize}
-    \item Everything is GDB based
-      \begin{itemize}
-        \item First release 1983
-        \item Protocol is serial \& ASCII based
-        \item Not intended for embedded
-        \item Codebase is suboptimal
-      \end{itemize}
-    \item Different UI for every tool
-    \item No proper integration with tools
-  \end{itemize}
-\end{frame}
+% \section{probe_rs.await?;}
 
-\begin{frame}[c]{So what is probe.rs?}
-  \begin{itemize}
-    \item
-  \end{itemize}
-\end{frame}
+% \begin{frame}[c]{Where do we want to go}
+%   \begin{itemize}
+%     \item
+%   \end{itemize}
+% \end{frame}
 
-\section{Future}
-
-\begin{frame}[c]{Where do we want to go}
-  \begin{itemize}
-    \item
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c]{Contribute}
-  \begin{itemize}
-    \item
-  \end{itemize}
-\end{frame}
+% \begin{frame}[c]{Contribute}
+%   \begin{itemize}
+%     \item
+%   \end{itemize}
+% \end{frame}
 
 % ----------------------------------------------------------------- %
 
