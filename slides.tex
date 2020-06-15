@@ -240,9 +240,8 @@
     \item[+] Huge featureset
     % Many of those tools are directly from the manufacturers themselves. This can be a plus as the manufacturer knows their product best
     % and is able to use this knowledge to make the best tool possible.
+    % The manufacturers most likely will put in the least effort to make their chips work with the tooling and don't provide any extended functionality.
     \item[+] From the manufacturers themselves
-    % The manufacturers most likely will put in the least effort to make their chips work with the tooling and don't provide any extended functionality. 
-    \item[−] From the manufacturers themselves 
     % The tools all have different UIs and APIs. This is especially annoying when you have to work with different tools for different chips.
     \item[−] Different interfaces
     % Especially the good tooling is proprietary. An exception here is OpenOCD which is featureful and Open Source. 
@@ -270,15 +269,6 @@
     \item Rust Library
     \item Talks to ARM and RISC-V cores
     \item Supports CMSIS-DAP, ST-Link, J-Link
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c]{Why another tool?}
-  \begin{itemize}
-    \item Library approach
-    \item Modern low level language
-    \item Independant
-    \item Plug and play
   \end{itemize}
 \end{frame}
 
@@ -321,19 +311,88 @@
   \end{minted}
 \end{frame}
 
-% \section{probe_rs.await?;}
+\begin{frame}[c,fragile]{Flashing}
+  \begin{itemize}
+    \item we use CMSIS-Packs
+    \item thousands of available targets
+    \item custom format for more info
+  \end{itemize}
+\end{frame}
 
-% \begin{frame}[c]{Where do we want to go}
-%   \begin{itemize}
-%     \item
-%   \end{itemize}
-% \end{frame}
+\begin{frame}[c,fragile]{cargo flash}
+  \begin{itemize}
+    \item slim cargo plugin
+    \item for flashing targets
+    \item for quick entry
+    \item https://github.com/probe-rs/cargo-flash
+  \end{itemize}
+\end{frame}
 
-% \begin{frame}[c]{Contribute}
-%   \begin{itemize}
-%     \item
-%   \end{itemize}
-% \end{frame}
+\begin{frame}[c,fragile]{cargo embed}
+  \begin{itemize}
+    \item fat client embedded toolkit
+    \item flashing
+    \item RTT
+    \item ITM
+    \item GDB
+    \item more?
+    \item highly configurable
+    \item https://github.com/probe-rs/cargo-embed
+  \end{itemize}
+\end{frame}
+
+\section{probe\_rs.await?;}
+
+\begin{frame}[c,fragile]{vscode}
+  \begin{itemize}
+    \item VSCode plugin
+    \item Microsoft DAP
+    \item no GDB required
+    \item Modern, extensive API (JSON)
+    \item async
+    \item working, with limitations
+    \item https://github.com/probe-rs/vscode
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]{ITM}
+  \begin{itemize}
+    \item powerful data streaming from the target
+    \item ISR events
+    \item memory access events
+    \item custom binary data
+    \item working, not on master yet
+    \item https://github.com/probe-rs/probe-rs/pull/145
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]{Custom Hooks}
+  \begin{itemize}
+    \item use CMSIS-Pack hooks
+    \item uses custom WASM format
+    \item poc, no PR yet
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]{rs-probe}
+  \begin{itemize}
+    \item open source probe
+    \item pure rust firmware
+    \item extremely fast (500 Mbit/s)
+    \item uses standard ARM API
+    \item can stream DAP, ITM and UART data
+    \item https://github.com/korken89/hs-probe
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Contribute}
+  \begin{itemize}
+    \item https://github.com/probe-rs/probe-rs
+    \item \#probe-rs:matrix.org on Matrix
+    \item Questions \& Bugreports very welcome
+    \item PRs very welcome
+  \end{itemize}
+\end{frame}
 
 % ----------------------------------------------------------------- %
 
