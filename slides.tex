@@ -259,19 +259,6 @@ pub fn from_id(id: u8) -> PID {
   \end{itemize}
 \end{frame}
 
-\subsection{svd2rust}
-
-\begin{frame}[c]{svd2rust}
-  \begin{itemize}
-    \item Every Cortex-M μC vendor must provide an SVD (System View
-      Descriptions) file
-    \item SVD is an XML standard to describe peripheral registers
-    \item svd2rust\footnote{\url{https://github.com/japaric/svd2rust}}:
-      Generate Rust register maps (structs) from SVD files
-    \item Done for our μC family\footnote{\url{https://github.com/japaric/stm32f30x}}
-  \end{itemize}
-\end{frame}
-
 \begin{frame}[c]{More Resources}
   \begin{itemize}
     \item The Rust Embedded Book\footnote{\url{https://docs.rust-embedded.org/book/}}
@@ -519,6 +506,18 @@ pub fn from_id(id: u8) -> PID {
       heap memory allocation.\footnote{\url{https://github.com/rust-lang/rfcs/blob/master/text/2480-liballoc.md}}
     \item You need to define a \texttt{\#[global\_allocator]}\footnote{\url{https://doc.rust-lang.org/stable/std/alloc/\#the-global\_allocator-attribute}}
     \item Check out \url{https://crates.io/crates/alloc-cortex-m}
+  \end{itemize}
+\end{frame}
+
+\subsection{svd2rust}
+
+\begin{frame}[c]{svd2rust}
+  \begin{itemize}
+    \item Every Cortex-M μC vendor must provide an SVD (System View
+      Descriptions) file
+    \item SVD is an XML standard to describe peripheral registers
+    \item svd2rust\footnote{\url{https://github.com/rust-embedded/svd2rust}}:
+      Generate Rust register maps (structs) from SVD files
   \end{itemize}
 \end{frame}
 
