@@ -268,9 +268,9 @@ pub fn from_id(id: u8) -> PID {
   \end{itemize}
 \end{frame}
 
-\section{Embedded development}
+\section{probe-rs}
 
-\begin{frame}[c]{Embedded development}
+\begin{frame}[c]{Embedded Development}
   \begin{itemize}
     % On an x86 target you can load the program directly from disk to RAM from with in your os.
     % Where you also coded, compiled and debugged your program.
@@ -288,9 +288,10 @@ pub fn from_id(id: u8) -> PID {
     % This magic tool you always used but never really looked into is probe-rs, like many others.
     \item probe-rs
   \end{itemize}
+  \includegraphics[trim=2.5cm 0 0 2cm, clip, height=2.5\textheight]{./img/probe-chain.pdf}
 \end{frame}
 
-\begin{frame}[c]{Hardware Probes}
+\begin{frame}[c]{Existing Hardware Probes}
   \begin{itemize}
     % This is the standard we encourage everyone to use. It is developed by ARM and supports SWD as well as JTag, which makes it suitable for RISC-V too.
     % CMSIS-DAP has the capability to go very fast and has no hidden pitfalls or sealed behavior.
@@ -311,7 +312,7 @@ pub fn from_id(id: u8) -> PID {
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{Software Tooling}
+\begin{frame}[c]{Existing Software Tooling}
   \begin{itemize}
     % There is a sea of tools for the various microchips there are. There is many architectures for which there are different tools each.
     % This ensures that there is a tool for each task there is.
@@ -344,11 +345,12 @@ pub fn from_id(id: u8) -> PID {
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c]{So what is probe-rs?}
+\begin{frame}[c]{probe-rs!}
   \begin{itemize}
     \item Rust Library
     \item Talks to ARM and RISC-V cores
     \item Supports CMSIS-DAP, ST-Link, J-Link
+    \item Endless possibilities
   \end{itemize}
 \end{frame}
 
@@ -393,7 +395,7 @@ pub fn from_id(id: u8) -> PID {
 
 \begin{frame}[c,fragile]{Flashing}
   \begin{itemize}
-    \item we use CMSIS-Packs
+    \item CMSIS-Packs
     \item thousands of available targets
     \item custom format for more info
   \end{itemize}
@@ -467,6 +469,7 @@ pub fn from_id(id: u8) -> PID {
 
 \begin{frame}[c]{Contribute}
   \begin{itemize}
+    \item https://probe.rs
     \item https://github.com/probe-rs/probe-rs
     \item \#probe-rs:matrix.org on Matrix
     \item Questions \& Bugreports very welcome
