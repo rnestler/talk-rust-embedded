@@ -182,7 +182,7 @@ An example from the lin-bus crate\footnote{\url{https://github.com/Sensirion/lin
 /// P0 = ID0 ^ ID1 ^ ID2 ^ ID4
 /// P1 = ¬(ID1 ^ ID3 ^ ID4 ^ ID5)
 const fn from_id_const(id: u8) -> PID {
-    // count parity bits and check if they are even odd
+    // count parity bits and check if they are even / odd
     let p0 = (id & 0b1_0111).count_ones() as u8 & 0b1;
     let p1 = ((id & 0b11_1010).count_ones() as u8 + 1) & 0b1;
     PID(id | (p0 << 6u8) | (p1 << 7u8))
@@ -191,6 +191,7 @@ const fn from_id_const(id: u8) -> PID {
 \end{frame}
 
 \begin{frame}[c,fragile]{Less Constant Fun Example}
+  Saw the problem?\pause
   \begin{minted}[fontsize=\footnotesize]{rust}
 pub fn from_id(id: u8) -> PID {
     assert!(id < 64, "ID must be less than 64");
@@ -202,7 +203,7 @@ pub fn from_id(id: u8) -> PID {
 \begin{frame}{Constant Future}
   What is missing?
   \begin{itemize}
-    % Implementation is here, but design not finalized
+    % Implementation is here, but design not finalized. You can use it on nightly.
     \item Const generics\footnote{\url{https://github.com/rust-lang/rust/issues/44580}}
     % Important to have compile time assertions, think static_assert in C++
     \item Panicking in constants\footnote{\url{https://github.com/rust-lang/rust/issues/51999}}
