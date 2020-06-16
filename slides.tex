@@ -1,5 +1,8 @@
 \documentclass[aspectratio=1610,14pt,t]{beamer}
 
+\usepackage{fontspec}
+\newfontfamily\DejaVu{DejaVu Sans}
+
 % Colors
 \usepackage{color}
 \definecolor{mainorange}{HTML}{EC811B}
@@ -256,6 +259,95 @@ pub fn from_id(id: u8) -> PID {
   \item How to define async traits?
   \item Ecosystem needs to move as a whole on breaking changes
   \item 1.0 Release planed\footnote{\url{https://github.com/rust-embedded/embedded-hal/issues/177}}
+  \end{itemize}
+\end{frame}
+
+\subsection{async on embedded}
+\begin{frame}[c]{async --- Some Background}
+  \begin{itemize}
+    \item async/await landed in stable Rust 1.39\footnote{\url{https://blog.rust-lang.org/2019/11/07/Async-await-stable.html}}
+    \item In February 2020 ferrous-systems started blogging about bringing it
+      to embedded\footnote{\url{https://ferrous-systems.com/blog/embedded-async-await/}}
+      \footnote{\url{https://ferrous-systems.com/blog/async-on-embedded/}}
+    \item Since Rust 1.44 usable on \texttt{no\_std}
+      \footnote{\url{https://ferrous-systems.com/blog/stable-async-on-embedded/}}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{async --- What is it Even?}
+  \begin{itemize}
+    \item Mostly syntactic suger for a state machine
+    \item Useful for concurrent waiting
+  \end{itemize}
+\end{frame}
+
+% This is massively oversimplified. In reality we have generic Futures and pass
+% a context with the wake function to signal that the Future should be polled
+% again.
+\begin{frame}[c,fragile]{async --- State Machine}
+  \begin{columns}[t,onlytextwidth]
+  \column{.6\textwidth}
+  \begin{minted}[fontsize=\small]{rust}
+async fn foo() -> u8 {
+    1
+}
+async fn bar(a: u8) -> u8 {
+    a + 2
+}
+async fn f() -> u8 {
+    let a = foo().await;
+    bar(a).await
+}
+	\end{minted}
+  \pause\column{.4\textwidth}
+  \begin{minted}[fontsize=\small]{rust}
+enum Future {
+    Ready(u8),
+    Pending,
+}
+
+enum State {
+    Foo,
+    Bar(u8),
+    Done(u8),
+}
+  \end{minted}
+	\end{columns}
+\end{frame}
+
+\begin{frame}[c,fragile]{async --- State Machine}
+  \begin{minted}[fontsize=\small]{rust}
+fn f_desugared(state: State) -> State {
+    match state {
+        State::Foo => match foo_() {
+            Future::Ready(a) => State::Bar(a),
+            Future::Pending => State::Foo,
+        },
+        State::Bar(a) => match bar_(a) {
+            Future::Ready(b) => State::Done(b),
+            Future::Pending => State::Bar(a),
+        }
+        State::Done(b) => State::Done(b)
+    }
+}
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c]{async --- Why on Embedded?}
+  \begin{itemize}
+    \item Most embedded systems are event driven $\rightarrow$ Most code is
+      \emph{awaiting} events.
+    \item Embedded systems may want to save power $\rightarrow$ Sleep whenever
+      possible.
+		\item We often need to wait for peripherals / IO
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{async --- The \texttt{Future}}
+  \begin{itemize}
+    \item Reusable executors?
+    \item Thread safety with interrupts?
+    \pause\item RTIC may provide a solution for that {\DejaVu ☺}
   \end{itemize}
 \end{frame}
 
