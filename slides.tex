@@ -248,6 +248,17 @@ pub fn from_id(id: u8) -> PID {
 \movie[autostart,loop]{\includegraphics[height=0.8\textheight]{./img/shtc3-monitor-0.png}}{./img/shtc3-monitor.mp4}
 \end{frame}
 
+\begin{frame}[c]{Embedded HAL --- Challanges / Future}
+  \begin{itemize}
+  \item It's hard to define traits which work everywhere
+  % Single vs. multi byte transfer, DMA? SPI CS? Own the HW device?:w
+
+  \item How to define async traits?
+  \item Ecosystem needs to move as a whole on breaking changes
+  \item 1.0 Release planed\footnote{\url{https://github.com/rust-embedded/embedded-hal/issues/177}}
+  \end{itemize}
+\end{frame}
+
 \subsection{svd2rust}
 
 \begin{frame}[c]{svd2rust}
