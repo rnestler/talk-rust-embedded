@@ -491,4 +491,24 @@ pub fn from_id(id: u8) -> PID {
   \vspace{3cm}
 \end{frame}
 }
+
+
+\setbeamertemplate{section in toc}[sections numbered]
+\pgfdeclareimage[width=\paperwidth]{bg}{background-light.pdf}
+\usebackgroundtemplate{\pgfuseimage{bg}}
+\appendix
+\section{\appendixname}
+\frame{\tableofcontents}
+\subsection{Alloc crate}
+
+\begin{frame}[c]{alloc crate}
+  \begin{itemize}
+    \item alloc allows you to use a subset of std (e.g. \texttt{Vec, Box, Arc})
+      in \texttt{\#![no\_std]} environments if the environment has access to
+      heap memory allocation.\footnote{\url{https://github.com/rust-lang/rfcs/blob/master/text/2480-liballoc.md}}
+    \item You need to define a \texttt{\#[global\_allocator]}\footnote{\url{https://doc.rust-lang.org/stable/std/alloc/\#the-global\_allocator-attribute}}
+    \item Check out \url{https://crates.io/crates/alloc-cortex-m}
+  \end{itemize}
+\end{frame}
+
 \end{document}
