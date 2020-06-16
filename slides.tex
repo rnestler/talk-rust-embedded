@@ -210,6 +210,23 @@ pub fn from_id(id: u8) -> PID {
   \end{itemize}
 \end{frame}
 
+
+\begin{frame}[c]{New Platform Support}
+  \begin{itemize}
+    \item AVR basic support got merged\footnote{\url{https://github.com/rust-lang/rust/pull/69478}} \footnote{\url{https://github.com/rust-lang/rust/issues/44052}}
+    \item New ARM targets: thumbv7neon-linux-\{androideabi,gnueabihf\}, armv\{6/7\}-unknown-freebsd-gnueabihf, aarch64-unknown-none-*
+    \item New RISC-V targets: riscv64imac-unknown-none-elf, riscv64gc-unknown-none-elf, riscv32i-unknown-none-elf
+    \item Sony PSP support\footnote{\url{https://github.com/rust-lang/rust/pull/72062}}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{RTFM $\rightarrow$ RTIC}
+  \begin{itemize}
+    \item RTFM got renamed $\rightarrow$ RTIC\footnote{\url{https://rtic.rs/0.5/book/en/migration_rtic.html}}
+    \item Examples: https://github.com/coredump-ch/nixie-counter/tree/master/firmware/
+  \end{itemize}
+\end{frame}
+
 \subsection{Embedded HAL}
 
 \begin{frame}[c]{What is the Embedded HAL?}
