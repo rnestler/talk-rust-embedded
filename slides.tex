@@ -138,10 +138,6 @@
 \begin{frame}[c]{The compiler}
   \begin{itemize}
     \item \texttt{const fn}
-      \begin{itemize}
-        \item More functions from libcore
-        \item More features (destructuring, bindings, assignment, \ldots)
-      \end{itemize}
     \item \texttt{core::future::Future}
     \item \texttt{alloc} crate is stable
     \item \texttt{MaybeUninit<T>}: Fixes undefined behavior
@@ -159,6 +155,58 @@
   \end{quote}
 
   $\rightarrow$ We'll get to it
+\end{frame}
+
+\subsection{\texttt{const fn}}
+
+\begin{frame}{Constant Fun!}
+  \begin{columns}[t,onlytextwidth]
+    \column{.4\textwidth}
+    \begin{figure}
+    \includegraphics[width=\textwidth]{img/const-all-the-fn.jpg}
+    \end{figure}
+    \column{.6\textwidth}
+    \begin{itemize}
+      \item Stabilized at the end of 2018
+      \item Tons of functions got const during 2019
+      \item More functions from libcore
+      \item More features (destructuring, bindings, assignment, \ldots)
+    \end{itemize}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[c,fragile]{Constant Fun Example}
+An example from the lin-bus crate\footnote{\url{https://github.com/Sensirion/lin-bus-rs/blob/e89739e326daf091803373419a4d60d0888422fc/src/frame.rs}}
+  \begin{minted}[fontsize=\footnotesize]{rust}
+/// Calculate the PID from an ID.
+/// P0 = ID0 ^ ID1 ^ ID2 ^ ID4
+/// P1 = ¬(ID1 ^ ID3 ^ ID4 ^ ID5)
+const fn from_id_const(id: u8) -> PID {
+    // count parity bits and check if they are even odd
+    let p0 = (id & 0b1_0111).count_ones() as u8 & 0b1;
+    let p1 = ((id & 0b11_1010).count_ones() as u8 + 1) & 0b1;
+    PID(id | (p0 << 6u8) | (p1 << 7u8))
+}
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{Less Constant Fun Example}
+  \begin{minted}[fontsize=\footnotesize]{rust}
+pub fn from_id(id: u8) -> PID {
+    assert!(id < 64, "ID must be less than 64");
+    PID::from_id_const(id)
+}
+  \end{minted}
+\end{frame}
+
+\begin{frame}{Constant Future}
+  What is missing?
+  \begin{itemize}
+    % Implementation is here, but design not finalized
+    \item Const generics\footnote{\url{https://github.com/rust-lang/rust/issues/44580}}
+    % Important to have compile time assertions, think static_assert in C++
+    \item Panicking in constants\footnote{\url{https://github.com/rust-lang/rust/issues/51999}}
+  \end{itemize}
 \end{frame}
 
 \subsection{Embedded HAL}
