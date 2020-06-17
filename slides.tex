@@ -433,66 +433,23 @@ fn main() -> ! {
   \includegraphics[trim=2.5cm 0 0 2cm, clip, height=2.5\textheight]{./img/probe-chain.pdf}
 \end{frame}
 
-\begin{frame}[c]{Existing Hardware Probes}
-  \begin{itemize}
-    % This is the standard we encourage everyone to use. It is developed by ARM and supports SWD as well as JTag, which makes it suitable for RISC-V too.
-    % CMSIS-DAP has the capability to go very fast and has no hidden pitfalls or sealed behavior.
-    \item CMSIS-DAP
-    % This is the debug probes provided by ST. They come in various forms and there is cheap china clones.
-    % Unfortunately their API is closed source and only reverse engineered. That by iself is manageable. But the ST-Link firmwares so some magic
-    % Which sometimes leads to unexpected results. For their v3 series they even locked usage to ST products only. This is very sad as the HW is great.
-    \item ST-Link
-    % The J-Link is a properietary probe by Segger, a german company. Their probes go way back and provide the biggest and most complete featureset.
-    % The API was released in a PDF once and can be pulled from the internet time machine.
-    % There is more (and even more expensive) probes from other manufacturers which are more unknown but have the same issues & features in essence.
-    \item J-Link
-    % The Blackmagic Probe is an open source probe that can be used without any additional tooling on the PC as it has the GDB stub built in.
-    % This enables users to directly use the probe without installing anything. This is great. What's not great is that you have to update the probe firmware
-    % whenever you want to add a new target. And of course, GDB has no more right to exist in the embedded world; more on that later.
-    \item Blackmagic Probe
-    \item ...
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c]{Existing Software Tooling}
-  \begin{itemize}
-    % There is a sea of tools for the various microchips there are. There is many architectures for which there are different tools each.
-    % This ensures that there is a tool for each task there is.
-    % You also have the plus of being able to choose the tool that fits you best.
-    \item[+] Diverse
-    \item[+] Huge featureset
-    % Many of those tools are directly from the manufacturers themselves. This can be a plus as the manufacturer knows their product best
-    % and is able to use this knowledge to make the best tool possible.
-    % The manufacturers most likely will put in the least effort to make their chips work with the tooling and don't provide any extended functionality.
-    \item[+] From the manufacturers themselves
-    % The tools all have different UIs and APIs. This is especially annoying when you have to work with different tools for different chips.
-    \item[−] Different interfaces
-    % Especially the good tooling is proprietary. An exception here is OpenOCD which is featureful and Open Source.
-    % While cost can be one problem about proprietary tools, some of them are free and I mostly take issue with the fact,
-    % that if you want to use the tooling slightly different than intended by the manufacturer or happen to stumble upon a bug,
-    % you are in trouble.
-    \item[−] Proprietary
-    % Most of the existing tooling stems from old ages and oftentimes is tedious to use.
-    % Lots of weird config files or not even the possibility to really config things at all are only some of the issues here.
-    % Many of the tools offer a way to flash a chip and maybe a GDB server but that's about it.
-    % Then you are forced to do everything through GDB which is not necessarily a great choice.
-    \item[−] Cumbersome to use
-    % Many tools discourage contributions by chaotic source control (patch based gerrit with no real mainlining)
-    % or suboptimal language choices (such as Python which is not weary of any concept of bits).
-    \item[−] Contributing discouraged
-    % GDB is used in combination with most tooling. Whilst the sanity of GDB itself is quite arguable, it is quite powerful in terms of debugging functionaility.
-    % It is a very old, more or less one-file, C codebase. The GDB API is not very modern and lacks in many points. Optimally we want to skip GDB.
-    % GDB is not embedded aware. Most of the required things for embedded have been added with the extension API of GDB, which is done differently by every tool.
-    \item[−] Everything is GDB-based
-  \end{itemize}
-\end{frame}
-
 \begin{frame}[c]{probe-rs!}
   \begin{itemize}
     \item Rust Library
-    \item Talks to ARM and RISC-V cores
+    \item Easy to use
+    \item Unified interface
+    \item Developed on Github
+    \item Talks to ARM and RISC-V cores (for now)
     \item Supports CMSIS-DAP, ST-Link, J-Link
-    \item Endless possibilities
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Current State}
+  \begin{itemize}
+    \item Memory Access (read, write)
+    \item CPU Manipulation (run, halt, step, reset, etc.)
+    \item Breakpoints (set, reset)
+    \item Flashing (ELF, BIN, HEX)
   \end{itemize}
 \end{frame}
 
@@ -535,19 +492,32 @@ fn main() -> ! {
   \end{minted}
 \end{frame}
 
-\begin{frame}[c,fragile]{Flashing}
-  \begin{itemize}
-    \item CMSIS-Packs
-    \item thousands of available targets
-    \item custom format for more info
-  \end{itemize}
+\begin{frame}[c,fragile]{Flash Algorithms}
+  \begin{columns}[t,onlytextwidth]
+    \column{.7\textwidth}
+    \begin{itemize}
+      \item Used for fast flashing
+      \item Used to circumvent slow flash access
+      \item Small program loaded into RAM
+      \item Copies data from RAM to Flash
+      \item CMSIS-Packs
+      \begin{itemize}
+        \item ARM standard
+        \item thousands of available targets
+      \end{itemize}
+    \end{itemize}
+    \column{.3\textwidth}
+    \begin{figure}
+      \includegraphics[width=4cm]{./img/probe-chain.pdf}
+    \end{figure}
+  \end{columns}
 \end{frame}
 
 \begin{frame}[c,fragile]{cargo flash}
   \begin{itemize}
     \item slim cargo plugin
     \item for flashing targets
-    \item for quick entry
+    \item to jumpstart in a project
     \item https://github.com/probe-rs/cargo-flash
   \end{itemize}
 \end{frame}
@@ -567,7 +537,7 @@ fn main() -> ! {
 
 \section{probe\_rs.await?;}
 
-\begin{frame}[c,fragile]{vscode}
+\begin{frame}[c,fragile]{VSCode}
   \begin{itemize}
     \item VSCode plugin
     \item Microsoft DAP
