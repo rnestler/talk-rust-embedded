@@ -343,6 +343,42 @@ fn f_desugared(state: State) -> State {
   \end{itemize}
 \end{frame}
 
+\begin{frame}[c,fragile]{async --- A blocking blinky}
+  \begin{minted}[fontsize=\footnotesize]{rust}
+fn main() -> ! {
+    let mut led = Led::new();
+    let mut timer = Timer::new();
+
+    loop {
+        led.on();
+        timer.delay_ms(1_000);
+        led.off();
+        timer.delay_ms(1_000);
+    }
+}
+  \end{minted}
+\end{frame}
+
+\begin{frame}[c,fragile]{async --- A async blinky}
+  \begin{minted}[fontsize=\footnotesize]{rust}
+fn main() -> ! {
+    let mut led = Led::new();
+    let mut timer = Timer::new();
+
+    // `block_on` runs the future (`async` block) to completion
+    task::block_on(async {
+        loop {
+            led.on();
+            timer.wait(Duration::from_secs(1)).await;
+            // ^ suspends the task for one second
+            led.off();
+            timer.wait(Duration::from_secs(1)).await;
+        }
+    })
+}
+  \end{minted}
+\end{frame}
+
 \begin{frame}[c]{async --- The \texttt{Future}}
   \begin{itemize}
     \item Reusable executors?
