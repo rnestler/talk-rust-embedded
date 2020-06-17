@@ -379,9 +379,23 @@ fn main() -> ! {
   \end{minted}
 \end{frame}
 
+
+
+\begin{frame}[c]{async --- embrio-rs\footnote{\url{https://github.com/Nemo157/embrio-rs}}}
+  \begin{itemize}
+    \item Playground for async on \texttt{no\_std}
+    \item Provides a custom async desugaring via a proc macro
+    \item Not actively developed anymore according to author\footnote{\url{https://www.reddit.com/r/rust/comments/f0ckiv/bringing_asyncawait_to_embedded_rust/fgwh6ij/}}
+    \item Works very nice on the NRF51
+    \item Used in the Polymer mechanical keyboard firmware\footnote{\url{https://josh.robsonchase.com/rest-of-the-keyboard/}}
+  \end{itemize}
+\end{frame}
+
 \begin{frame}[c]{async --- The \texttt{Future}}
   \begin{itemize}
+    % Maybe one for Cortex-M?
     \item Reusable executors?
+    % On single core just disable all interrupts in critical sections
     \item Thread safety with interrupts?
     \pause\item RTIC may provide a solution for that {\DejaVu ☺}
   \end{itemize}
