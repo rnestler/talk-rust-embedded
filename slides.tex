@@ -201,8 +201,12 @@ pub fn from_id(id: u8) -> PID {
     PID::from_id_const(id)
 }
   \end{minted}
-
-  %TODO where did the workaround go??
+  \pause Workaround
+  \begin{minted}[fontsize=\footnotesize]{rust}
+  // check that id < 64. Compile error during const evaluation
+  // and panic on debug build
+  let _: u8 = id + 192;
+  \end{minted}
 \end{frame}
 
 \begin{frame}{Constant Future}
