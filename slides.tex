@@ -201,6 +201,8 @@ pub fn from_id(id: u8) -> PID {
     PID::from_id_const(id)
 }
   \end{minted}
+
+  %TODO where did the workaround go??
 \end{frame}
 
 \begin{frame}{Constant Future}
@@ -213,6 +215,7 @@ pub fn from_id(id: u8) -> PID {
   \end{itemize}
 \end{frame}
 
+\subsection{Other News}
 
 \begin{frame}[c]{New Platform Support}
   \begin{itemize}
@@ -239,7 +242,7 @@ pub fn from_id(id: u8) -> PID {
   \item Higher level crates (drivers) are write once use always
   \item Nice examples: shtc3
     driver\footnote{\url{https://github.com/dbrgn/shtcx-rs}} developed and
-    debugged on a  Raspberry Pi and used with an SMT32
+    debugged on a  Raspberry Pi and used with an STM32
   \end{itemize}
 \end{frame}
 
@@ -266,7 +269,7 @@ pub fn from_id(id: u8) -> PID {
 \begin{frame}[c]{async --- Some Background}
   \begin{itemize}
     \item async/await landed in stable Rust 1.39\footnote{\url{https://blog.rust-lang.org/2019/11/07/Async-await-stable.html}}
-    \item In February 2020 ferrous-systems started blogging about bringing it
+    \item In February 2020 Ferrous Systems started blogging about bringing it
       to embedded\footnote{\url{https://ferrous-systems.com/blog/embedded-async-await/}}
       \footnote{\url{https://ferrous-systems.com/blog/async-on-embedded/}}
     \item Since Rust 1.44 usable on \texttt{no\_std}
@@ -557,7 +560,6 @@ fn main() -> ! {
     \item fat client embedded toolkit
     \item flashing
     \item RTT
-    \item ITM
     \item GDB
     \item more?
     \item highly configurable
